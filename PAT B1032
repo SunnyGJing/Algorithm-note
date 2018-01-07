@@ -1,0 +1,56 @@
+/* 挖掘机技术哪家强 */ 
+
+#if(0)        //错的 
+#include <cstdio>
+int main(){
+	int N, i, j, sch = 1, max, num;
+	int score[100000][2];
+	while(scanf("%d",&N) != EOF){
+		for(i = 0; i < N; i++){
+			scanf("%d%d",&score[i][0], &score[i][1]);
+		}
+	}
+	for(i = 0; i < N; i ++){
+		if(sch < score[i][0])  sch = score[i][0];
+	}
+	int total[sch][2]={0};
+	for(i = 0; i < N; i ++){
+		j = score[i][0];
+		total[j-1][0] = j;
+		total[j-1][1] += score[i][1];
+	}
+	num = total[0][0];
+	max = total[0][1];
+	for(i = 0; i < sch; i ++){
+		if(max < total[i][1]){
+			num = total[i][0];
+			max = total[i][1];
+		}
+	}
+	printf("%d %d",num,max);
+	return 0;
+ } 
+ #endif
+ 
+ #if(1)
+ #include <cstdio>
+ const int maxn = 100010;
+ int school[maxn] = {0};        //记录每个学校的总分
+ int main(){
+ 	int n, schID, score;
+ 	scanf("%d",&n);
+	for(int i = 0; i < n; i++){
+	scanf("%d%d", &schID, &score);
+ 	school[schID] += score;
+	} 
+ int k = 1, MAX = -1;
+ for(int i = 1; i <= n; i++){
+ 	if(school[i] > MAX){
+ 		MAX = school[i];
+ 		k = i;
+	 }
+ }
+ printf("%d %d", k, MAX);
+ return 0;
+ }
+ #endif
