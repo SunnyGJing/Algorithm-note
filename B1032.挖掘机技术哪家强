@@ -1,6 +1,28 @@
 /* 挖掘机技术哪家强 */ 
+ 
+#if(0)      //18-01-08       
+#include <cstdio>
+const int maxn = 10010;
+int main(){
+	int n, schID, temp, max = -1;
+	int score[maxn]={0};
+	scanf("%d",&n);
+	for(int i=0; i<n; i++){
+		scanf("%d%d",&schID, &temp);
+		score[schID] += temp;
+	}
+	for(int i=1; i<=n; i++){
+		if(max < score[i]){
+			max = score[i];
+			schID = i;
+		} 
+	}
+	printf("%d %d",schID,max);
+	return 0;
+}
+#endif
 
-#if(0)        //错的 
+#if(0)        //错的   18-01-07
 #include <cstdio>
 int main(){
 	int N, i, j, sch = 1, max, num;
