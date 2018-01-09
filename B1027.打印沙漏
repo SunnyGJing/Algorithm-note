@@ -14,7 +14,6 @@ int main(){
 		for(int q=j; q<r; q++) printf(" "); //打印空格
 		for(int k=0;k<(2*j)-1;k++)
 			printf("%c",ch); //打印某一行的符号 
-		for(int q=j; q<r; q++) printf(" "); 
 		printf("\n"); 
 	}
 	// 输出下面的正三角形（去尖）
@@ -22,7 +21,6 @@ int main(){
 		for(int q=(((2*r)-1)-((2*j)-1))/2; q>0; q--) printf(" "); 
 		for(int k=0;k<(2*j)-1;k++)
 			printf("%c",ch); //打印某一行的符号 
-		for(int q=(((2*r)-1)-((2*j)-1))/2; q>0; q--) printf(" "); 
 		printf("\n"); 
 	}        
 	// 输出剩余个数
