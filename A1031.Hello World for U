@@ -21,3 +21,12 @@ int main(){
 	 	printf("%c",ch[j]);
 	 } 
 }
+
+/* 正确~~ 但如下技巧需要掌握
+	上面第5行代码 	while((c=getchar())!=EOF){
+					 ch[i] = c;
+					 i++;	} 
+	我这样写，本想用gets(ch); 但考虑到需要记字符串长度，改用循环计数 
+	看课本发现，可以用库函数简化！！！！一句代码就能获取长度！！！ （如下） 
+	#include <cstring>
+	int N = strlen(ch);  */  
