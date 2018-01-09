@@ -8,21 +8,21 @@ int main(){
 	n -= 1;
 	for(i = 2; n >= 2*(2*i-1);i++)
 		n -= 2*(2*i-1); //循环结束时，i-1=行数（上倒三角），n=剩余个数
-	int r = i-1; 
+	int r = i-1; //处理结束，下面开始打印输出
 	for(int j=r; j>0; j--){
 		for(int q=j; q<r; q++) printf(" "); //打印空格
 		for(int k=0;k<(2*j)-1;k++)
 			printf("%c",ch); //打印某一行的符号 
 		for(int q=j; q<r; q++) printf(" "); 
 		printf("\n"); 
-	}	
+	}	//打印上倒三角形
 	for(int j=2; j<=r; j++){
 		for(int q=(((2*r)-1)-((2*j)-1))/2; q>0; q--) printf(" "); 
 		for(int k=0;k<(2*j)-1;k++)
 			printf("%c",ch); //打印某一行的符号 
 		for(int q=(((2*r)-1)-((2*j)-1))/2; q>0; q--) printf(" "); 
 		printf("\n"); 
-	}
-	printf("%d",n);//打印剩余个数
+	}        //打印下正三角形（去尖）
+	printf("%d",n); //打印剩余个数
 	return 0;
 } 
