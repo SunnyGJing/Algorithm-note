@@ -1,0 +1,30 @@
+//基本实现！有一句不对！！！！！！   看课本学习结构体！！ 
+#include <cstdio>
+const int maxn=1010;
+int a[maxn][3]={0};
+int main(){
+	int n, m, temp;
+	long long num, numb ;
+	scanf("%d",&n);
+	for(int i=0; i<n; i++){
+		scanf("%lld%d%d",&num,&a[i][1],&a[i][2]);
+		a[i][0] = num % 1000;
+		numb = num/1000;            //这地方不对！！！！！！！为啥呢？？？、 
+		for(int j=0; j<i; j++){
+			if(a[i][0]==a[j][0]||a[i][1]==a[j][1]||a[i][2]==a[j][2]){
+				scanf("%lld%d%d",&num,&a[i][1],&a[i][2]);
+				a[i][0] = num % 1000;
+			} //输入保证每个人的准考证号不同、试机座位号不同、考试座位号不同 
+//		 printf("num=%lld %d %d %d",num,a[0][0],a[0][1],a[0][2]); 
+		}
+	}
+	scanf("%d",&m);
+	for(int i=0; i<m; i++){
+		scanf("%d",&temp);
+		for(int j=0; j<n; j++){
+			if(temp==a[j][1])
+				printf("%d%03d %d\n",numb,a[j][0],a[j][2]);     2353663919
+		}
+	}
+	return 0;
+}
