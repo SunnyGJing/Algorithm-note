@@ -1,0 +1,28 @@
+#include <cstdio>
+struct Person {
+	char name[10];
+	int year, month, day;
+}temp, maxn, minn;
+const int today = 20140906; 
+const int ago = 18140906;
+int main(){
+	int n, time, count=0, remotest = today+1, nearest = ago-1;
+	scanf("%d",&n);
+	for(int i=0; i<n; i++){
+		scanf("%s %d/%d/%d",&temp.name,&temp.year,&temp.month,&temp.day);
+		getchar();
+		time = temp.year*10000+temp.month*100+temp.day;
+		if(time<=today&&time>=ago){
+			count++;
+			if(nearest<time){
+				nearest = time;
+				minn= temp;
+			} else if(remotest>time){
+				remotest = time;
+				maxn = temp;
+			}
+		}
+	}
+	printf("%d %s %s",count,maxn.name,minn.name);
+	return 0;
+} 
