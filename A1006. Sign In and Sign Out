@@ -1,0 +1,24 @@
+#include <cstdio>
+struct Person {
+	char ID[20];
+	int l_hh, l_mm, l_ss;    //leave time
+	int c_hh, c_mm, c_ss;    //come  time
+}temp, earlest, latest;
+int main(){
+	int n,early=1000000, late=-1, c_time, l_time;
+	scanf("%d",&n);
+	for(int i=0; i<n; i++){
+		scanf("%s %d:%d:%d %d:%d:%d:%d",&temp.ID,&temp.c_hh,&temp.c_mm,&temp.c_ss,&temp.l_hh,&temp.l_mm,&temp.l_ss);
+		c_time=temp.c_hh*10000+temp.c_mm*100+temp.c_ss;
+		l_time=temp.l_hh*10000+temp.l_mm*100+temp.l_ss;
+		if(c_time<early){
+			early = c_time;
+			earlest = temp;
+		}
+		if(c_time>late){
+			late = c_time;
+			latest = temp;
+		}
+	}
+	printf("%s %s\n",earlest.ID,latest.ID);
+} 
