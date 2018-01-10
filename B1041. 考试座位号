@@ -1,4 +1,4 @@
-#if(1)//18.01.10 8:23  √√ 
+#if(1)//18.01.10 8:23  已在pat通过
 #include <cstdio>
 const int maxn = 1010; 
 struct Student {
@@ -23,7 +23,7 @@ int main(){
 }
 #endif
 
-#if(0)//18.01.09  ××× 
+#if(0)//18.01.09
 //基本实现！有一句不对！！！！！！   看课本学习结构体！！ 
 #include <cstdio>
 const int maxn=1010;
