@@ -1,26 +1,48 @@
-/* 挖掘机技术哪家强 */ 
- 
-#if(0)      //18-01-08       
+#if(0) // 已在pat通过 18-01-10 15:16 
+// 本以为自己的代码比课本代码更简就算是更优 但在对比pat的时间复杂度后发现
+// 我的思路：“每赋值一次便更新一次max，省去了单独枚举的过程”时间复杂度上升了。。。 
+// 课本的思路：“先依次赋值，全部完成后，再枚举更新max”更好一些！！！  学习了！！！ 
 #include <cstdio>
-const int maxn = 10010;
+const int maxn = 100010;
+int school[maxn]={0}; //学校编号为下标 存放该学校的总分 
 int main(){
-	int n, schID, temp, max = -1;
-	int score[maxn]={0};
+	int n, schID, score, ans_max=-1, ans_schID;
 	scanf("%d",&n);
 	for(int i=0; i<n; i++){
-		scanf("%d%d",&schID, &temp);
-		score[schID] += temp;
+		scanf("%d%d",&schID,&score); 
+		school[schID] += score;
+		if(ans_max<school[schID]){
+			ans_max = school[schID];
+			ans_schID = schID;
+		}
 	}
-	for(int i=1; i<=n; i++){
-		if(max < score[i]){
-			max = score[i];
-			schID = i;
-		} 
-	}
-	printf("%d %d",schID,max);
+	printf("%d %d\n",ans_schID,ans_max);
 	return 0;
-}
+} 
 #endif
+
+ #if(1)    // 参考代码 
+ #include <cstdio>
+ const int maxn = 100010;
+ int school[maxn] = {0};        //记录每个学校的总分
+ int main(){
+ 	int n, schID, score;
+ 	scanf("%d",&n);
+	for(int i = 0; i < n; i++){  //记录各学校总分 
+	scanf("%d%d", &schID, &score);
+ 	school[schID] += score;
+	} 
+ int k = 1, MAX = -1;
+ for(int i = 1; i <= n; i++){  //从所有学校中选出总分最高的一个 
+ 	if(school[i] > MAX){
+ 		MAX = school[i];
+ 		k = i;
+	 }
+ }
+ printf("%d %d", k, MAX);
+ return 0;
+ }
+ #endif
 
 #if(0)        //错的   18-01-07
 #include <cstdio>
@@ -52,27 +74,4 @@ int main(){
 	printf("%d %d",num,max);
 	return 0;
  } 
- #endif
- 
- #if(1)
- #include <cstdio>
- const int maxn = 100010;
- int school[maxn] = {0};        //记录每个学校的总分
- int main(){
- 	int n, schID, score;
- 	scanf("%d",&n);
-	for(int i = 0; i < n; i++){
-	scanf("%d%d", &schID, &score);
- 	school[schID] += score;
-	} 
- int k = 1, MAX = -1;
- for(int i = 1; i <= n; i++){
- 	if(school[i] > MAX){
- 		MAX = school[i];
- 		k = i;
-	 }
- }
- printf("%d %d", k, MAX);
- return 0;
- }
  #endif
