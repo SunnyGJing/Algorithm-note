@@ -1,3 +1,42 @@
+#if(1) //2018-01-10 14:51 已在pat通过
+// 和课本上给的代码不一样，自认为我的方法更好更适合我，抽空看看课本的思路吧！！！ 
+#include <cstdio>
+const int today = 20140906;
+const int ago = 18140906;
+struct Person {
+	char name[10];
+	int year;
+	int month;
+	int day;
+}temp,oldest,youngest;
+int main(){
+	int n, time, count=0,remote=today, resent=ago;
+	scanf("%d",&n);
+	for(int i=0; i<n; i++){
+		scanf("%s %d/%d/%d",temp.name,&temp.year,&temp.month,&temp.day);
+		getchar();
+		time = temp.year*10000+temp.month*100+temp.day;
+		if(time<=today&&time>=ago){
+			count ++;
+			if(time>=resent){
+				resent = time;
+				youngest = temp;
+			}
+			if(time<=remote){
+				remote = time;
+				oldest = temp;
+			}
+		}
+	}
+	if(count)
+		printf("%d %s %s\n",count,oldest.name,youngest.name);
+	else
+		printf("0\n");
+} 
+#endif
+ 
+#if(0) // 18-01-09 
+//提交到pat部分正确！！有一个结果不正确，原因待查？？？？？ 
 #include <cstdio>
 struct Person {
 	char name[10];
