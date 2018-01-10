@@ -34,13 +34,13 @@ int main(){
 #include <cstdio>
 struct Person {
 	char ID[20];
-	int hh, mm, ss; 
+	int hh, mm, ss;                     //这里简化了！！！！
 }temp, earlest, latest;
 int main(){
 	int n,early=1000000, late=-1, c_time, l_time;
 	scanf("%d",&n);
 	for(int i=0; i<n; i++){
-		scanf("%s %d:%d:%d",&temp.ID,&temp.hh,&temp.mm,&temp.ss);  
+		scanf("%s %d:%d:%d",&temp.ID,&temp.hh,&temp.mm,&temp.ss);    //这里分两个scanf实现！！时间变量重复使用！！
 		c_time=temp.hh*10000+temp.mm*100+temp.ss;
 		if(c_time<early){
 			early = c_time;
