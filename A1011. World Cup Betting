@@ -19,7 +19,7 @@ int main(){
 		}
 		result *= max;
 	}
-	result = (result * 0.65 -1) * 2.0;
+	result = (result * 0.65 -1) * 2;
 	printf("%c %c %c %.2f",ans[0],ans[1],ans[2],result);
 	return 0;
 } 
