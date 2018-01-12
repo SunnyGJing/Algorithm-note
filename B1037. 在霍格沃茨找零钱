@@ -1,0 +1,24 @@
+#include <cstdio>   //已在pat通过   18-01-12 22:10 
+int sign = 0;
+int main(){
+	int P, A;
+	int a[3];
+	scanf("%d.%d.%d",&a[0],&a[1],&a[2]);
+	P = a[2]+a[1]*29+a[0]*17*29;
+	scanf("%d.%d.%d",&a[0],&a[1],&a[2]);
+	A = a[2]+a[1]*29+a[0]*17*29;  //算出应付 P和实付 A
+	int x;
+	if(P<=A) x = A - P;
+	else{
+		sign = 1;
+		x = P - A;
+	}
+	a[2] = x%29;
+	a[1] = x/29%17;
+	a[0] = x/29/17;
+	if(sign)
+		printf("-%d.%d.%d",a[0],a[1],a[2]);
+	else
+		printf("%d.%d.%d",a[0],a[1],a[2]);
+
+}
