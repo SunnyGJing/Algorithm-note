@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <cstdio>  //已在pat通过  18年1月13日 14:44	 
 int main(){
 	int x, n=1;
 	scanf("%d",&x);
