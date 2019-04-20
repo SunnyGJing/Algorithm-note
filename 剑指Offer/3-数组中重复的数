@@ -1,0 +1,35 @@
+"""
+Analysis: 数组值以数组长度为上界，可利用下标。
+3种Solution 复杂度依次为 O(nlogn)+O(1) / O(n)+O(n) / O(n)+O(1)
+预览一下~ 主要code依次为 sort->if(a[i]==a[i+1]) / hash->if(hash[a[i]]=1) / find element not equal to its index
+"""
+
+class Solution 1:
+    # 这里要特别注意~找到任意重复的一个值并赋值到duplication[0]
+    # 函数返回True/False
+    def duplicate(self, numbers, duplication):
+        if len(duplication) == 0: return False
+        for i in range(0,len(numbers)):
+            if numbers[i]>len(numbers)-1 or numbers[i] < 0: return False
+            while not numbers[i] == i:
+                if numbers[i] == numbers[numbers[i]]:
+                    duplication[0] = numbers[i]
+                    return True
+                else:
+                    numbers[numbers[i]], numbers[i] = numbers[i],numbers[numbers[i]]
+        return False
+        
+class Solution 1:
+    # 这里要特别注意~找到任意重复的一个值并赋值到duplication[0]
+    # 函数返回True/False
+    def duplicate(self, numbers, duplication):
+        if len(duplication) == 0: return False
+        for i in range(0,len(numbers)):
+            if numbers[i]>len(numbers)-1 or numbers[i] < 0: return False
+            while not numbers[i] == i:
+                if numbers[i] == numbers[numbers[i]]:
+                    duplication[0] = numbers[i]
+                    return True
+                else:
+                    numbers[numbers[i]], numbers[i] = numbers[i],numbers[numbers[i]]
+        return False
