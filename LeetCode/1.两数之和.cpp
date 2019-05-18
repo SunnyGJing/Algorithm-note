@@ -5,8 +5,8 @@ return: vector<int>: 数组里存在2个数，它们的和等于target，返回�
 """
 
 class My_solution_1 {
-# O(n²)+O(1)
-# 简单的遍历数组
+// O(n²)+O(1)
+// 简单的遍历数组
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
         vector<int> res; 
@@ -23,9 +23,9 @@ public:
 };
 
 class Need_to_learn_1 {
-# O(n)+O(n)
-# 用hash判断过去是否存在某元素，使得此元素和当前元素的和等于target
-# 注意: return不能只写在条件语句里，可以在条件语句外面返回空{}
+// O(n)+O(n)
+// 用hash判断过去是否存在某元素，使得此元素和当前元素的和等于target
+// 注意: return不能只写在条件语句里，可以在条件语句外面返回空{}
 public:
     vector<int> twoSum(vector<int>& nums, int target) {
         unordered_map<int, int> hash;
