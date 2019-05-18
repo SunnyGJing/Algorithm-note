@@ -61,7 +61,7 @@ public:
 };
 
 
-class toLearn_2 {
+class toLearn_1 {
     // 用递归实现重复的插入和值节点的操作
     // O(n)+O(n)
 public:
