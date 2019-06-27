@@ -1,0 +1,54 @@
+"""
+Creat time: 2019-06-25 03：25
+Last modified time: -----
+
+在一个长度为n+1的数组里的所有数字都在 1~n 的范围内。不能修改输入的数组，返回任意一个重复的数字。
+
+3种Solution
+复杂度依次为 O(n)+O(n) / O(logn)+O(1)
+预览一下~ 主要code依次为 array->if(number==array[number]) / 二分查找 (数组元素是1~数组长度n+1之间的整数，可利用范围)
+"""
+
+class Solution_1:
+    // 思想类似于哈希表
+    int duplicate(int numbers[], int length) {
+        int a[length];
+        if(length==0) return;
+        for(int i=0; i<length; i++) {
+            if(a[numbers[i]]==numbers[i]) {
+                return numbers[i];
+            }
+            else
+                a[numbers[i]] = numbers[i];
+        }
+    }
+
+class Solution_2:
+    // 二分查找
+    int countRange(const int* numbers, int length, int start, int end) {
+        int count = 0;
+        for(int i=0; i<length; i++) {
+            if(numbers[i]>=start && numbers[i]<=end)
+                count++;
+        }
+        return count;
+    }
+
+    int duplicate(int numbers[], int length) {
+        if(length==0) return -1;
+        int start = 1;
+        int end = length-1;
+        while(start < end) {
+            int middle = ((end-start) >> 2) + start;
+            int count = countRange(numbers, length, start, middle)
+            if(count > (middle-start+1))
+                end = middle;
+            else
+                start = middle + 1;
+        }
+        int count = countRange(numbers, length, start, start)
+        if (count > 1)
+            return start;
+        else:
+            return -1;
+    }
