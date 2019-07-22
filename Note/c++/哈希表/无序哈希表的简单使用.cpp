@@ -23,4 +23,8 @@ int main() {
     for(auto& v:hash) {
         cout<<v.first<<" "<<v.second<<endl;
     }
+    // 同上
+    for(unordered_map<int, int>::iterator iter=hash.begin(); iter!=hash.end(); iter++) {
+        cout << iter->first << " " << iter->second << endl;
+    }
 }
