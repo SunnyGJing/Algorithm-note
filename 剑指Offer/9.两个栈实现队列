@@ -1,0 +1,34 @@
+"""
+Creat time: 2019-07-24 23:11
+Last modified time: 
+
+用两个栈实现队列的Push和Pop操作。队列的元素为int型
+
+思路：stack1存放新的元素，stack2存放逆置后的元素
+
+"""
+
+class Solution
+{
+public:
+    void push(int node) {
+        stack1.push(node);
+    }
+
+    int pop() {
+        if(stack2.empty()) {
+            while(!stack1.empty()) {
+                stack2.push(stack1.top());
+                stack1.pop();
+            }
+        }
+        int result = stack2.top();
+        stack2.pop();
+
+        return result;
+    }
+
+private:
+    stack<int> stack1;
+    stack<int> stack2;
+};
