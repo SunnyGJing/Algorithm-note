@@ -1,0 +1,42 @@
+"""
+Creat time: 2019-07-24 23:33
+Last modified time: 
+
+
+
+"""
+
+class Solution
+{
+public:
+    void push(int node) {
+        if(queue2.empty())
+            queue1.push(node);
+        else
+            queue2.push(node);
+    }
+    int pop() {
+        if(!queue1.empty()) {
+            while(queue1.size()!=1) {
+                queue2.push(queue1.front());
+                queue1.pop();
+            }
+            int result = queue1.front();
+            queue1.pop()
+            return result;
+        }
+        if(!queue2.empty()) {
+            while(queue2.size()!=1) {
+                queue1.push(queue2.front());
+                queue2.pop();
+            }
+            int result = queue2.front();
+            queue2.pop()
+            return result;
+        }
+    }
+
+private:
+    queue<int> queue1;
+    queue<int> queue2;
+};
