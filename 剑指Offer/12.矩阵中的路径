@@ -7,9 +7,11 @@ Last modified time: 2019-07-27 19:53
 
 思路：
 dfs
+解法1是自己的解法
+解法2是《剑指offer》的解法
 """
 
-class Solution {
+class Solution_1 {
 public:
     bool hasPath(char* matrix, int rows, int cols, char* str){
         if(strlen(matrix)==0 || rows<=0 || cols<=0) return false;
@@ -65,5 +67,50 @@ public:
             }
         }
         return true;
+    }
+};
+
+
+class Solution_2 {
+public:
+    bool hasPath(char* matrix, int rows, int cols, char* str){
+        if(matrix==nullptr || rows<1 || cols<1 || str==nullptr)
+            return false;
+        bool* visited = new bool[rows*cols];
+        memset(visited, 0, rows*cols);
+
+        int pathLength = 0;
+        for(int row=0; row<rows; ++row) {
+            for(int col=0; col<cols; ++col) {
+                if(hashPathCore(matrix,rows,cols,row,col,str,pathLength,visited)) 
+                    return true;
+            }
+        }
+        delete[] visited;
+        return false;
+    }
+    
+    bool hasPathCore(const char* matrix, int rows, int cols, int row,
+        int col, const char* str, int& pathLength, bool* visited) 
+    {
+        if(str[pathLength] == '\0')
+            return true;
+        bool hasPath = false;
+        if(row>=0 && row<rows && col>=0 && col<cols
+            && matrix[rows*cols+col]==str[pathLength]
+            && !visited[row*cols+col])
+        {
+            ++pathLength;
+            visited[row*cols+col] = true;
+            hasPath = hasPath(matrix,rows,cols,row,col-1,str,pathLength,visited)
+                ||  hasPath(matrix,rows,cols,row,col+1,str,pathLength,visited)
+                ||  hasPath(matrix,rows,cols,row-1,col,str,pathLength,visited)
+                ||  hasPath(matrix,rows,cols,row+1,col,str,pathLength,visited);
+            if(!hasPath) {
+                --pathLength;
+                visited[row*cols+col]=false;
+            }
+        }
+        return hasPath;
     }
 };
