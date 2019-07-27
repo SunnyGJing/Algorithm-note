@@ -1,9 +1,12 @@
 """
 Creat time: 2019-07-26 17:59
-Last modified time: 
+Last modified time: 2019-07-27 19:53
 
 
-给定一个矩阵，判断在矩阵中是否存在字符串路径。
+给定一个矩阵，判断在矩阵中是否存在字符串路径。（回溯法）
+
+思路：
+dfs
 """
 
 class Solution {
