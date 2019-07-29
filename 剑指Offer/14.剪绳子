@@ -1,0 +1,44 @@
+"""
+Creat time: 2019-07-28 14:22
+Last modified time: 
+
+长度为N的绳子，剪成几段后，每段的长度的最大乘积是多少？（总长>1  段数>1）
+
+解法1：动态规划
+解法2：贪婪算法（需要数学证明）
+"""
+
+Class Solution_1 {
+public:
+    int maxProductAfterCutting(int length) {
+        if(length < 2) return 0;
+        int max_product[length+1];
+        memset(max_product, -1, length+1);
+        max_product[1] = 1;
+        for(int n=2; n<=length; n++) {
+            for(int i=1; i<n; i++) {
+                int product = (n-i) * max_product[i];
+                if(product > max_product[n])
+                    max_product[n] = product;
+            }
+        }
+        return max_product[length];
+    }
+}
+
+Class Solution_2 {
+public:
+    int maxProductAfterCutting(int length) {
+        if(length < 2) return 0;
+        if(length == 2) return 1;
+        if(length == 3) return 2;
+
+        int timeOf3 = length / 3;
+        if(length - 3 * timeOf3 == 1)
+            timeOf3 -= 1;
+            
+        int timeOf2 = (length - 3 * timeOf3) / 2;
+
+        return (int)(power(2,timeOf2)) * (int)(power(3,timeOf3));
+    }
+}
