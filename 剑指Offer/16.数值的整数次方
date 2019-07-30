@@ -1,0 +1,64 @@
+"""
+Creat time: 2019-07-30 16:53
+Last modified time: 
+
+
+求base的exponent次方 （无需考虑大数问题）
+
+注意，要考虑指数为负的情况。
+"""
+
+class Solution_1 {
+public:
+    double Power(double base, int exponent) {
+        bool negative_exp = false;
+        bool invalid_input = false;
+        if(equal(base,0.0) && exponent<0) {
+            invalid_input = true;
+            return 0.0;
+        }
+        if(exponent < 0) {
+            negative_exp = true;
+            exponent *= -1;
+        }
+        double result = 1;
+        while(exponent--) {
+            cout<<exponent+1<<' ';
+            result *= base;
+            cout << result << endl;
+        }
+        if(negative_exp) result = 1 / result;
+        return result;
+    }
+};
+
+
+class Solution_2 {
+public:
+    double Power(double base, int exponent) {
+        bool negative_exp = false;
+        bool invalid_input = false;
+        if(equal(base, 0.0) && exponent<0) {
+            invalid_exp = true;
+            return 0.0;
+        }
+        if(exponent<0) {
+            exponent *= -1;
+            negative_exp = true;
+        }
+        double result = powerCompute(base, exponent);
+        if(negative_exp)
+            result = 1 / result;
+        return result;
+    }
+
+    double powerCompute(double base, int exponent) {
+        if(exponent == 0) return 1;
+        if(exponent == 1) return base;
+        double result = powerCompute(base, exponent >> 1);
+        result *= result;
+        if(exponent & 0x1 == 1)
+            result *= base;
+        return result;
+    }
+};
