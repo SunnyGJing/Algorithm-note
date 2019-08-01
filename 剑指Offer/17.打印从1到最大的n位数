@@ -3,6 +3,9 @@ Creat time: 2019-07-30 17:45
 Last modified time: 
 
 输入数字n，按顺序打印出从1到n位的最大数字。
+
+思路1：迭代+1并打印
+思路2：递归结束后打印
 """
 class Solution_1 {
 public:
