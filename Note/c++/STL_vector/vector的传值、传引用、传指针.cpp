@@ -88,6 +88,8 @@ void function3(std::vector<std::vector<int> > *vec)
 
 int main()
 {
+    //https://www.cnblogs.com/xiaoxi666/p/6843211.html
+    
     //创建2*3的vector容器v,初始值均初始化为0 1 2 1 2 3
     std::vector<std::vector<int> > v(2,std::vector<int>(3,0));
     for(int i=0;i<2;i++)
