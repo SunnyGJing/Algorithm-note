@@ -1,0 +1,64 @@
+"""
+Creat time: 2019-08-04 22：35
+Last modified time: 
+
+如果一个链表包含环，如何找到环的入口结点？
+
+解法思路源自《剑指offer》，多加学习
+（我的解法，1快1慢指针，只能判断是否有环，不能找到环的入口结点）
+"""
+
+struct ListNode {
+    int val;
+    struct ListNode *next;
+    ListNode(int x) : val(x), next(NULL) { }
+};
+
+
+class Solution {
+public:
+    ListNode* EntryNodeOfLoop(ListNode* pHead) {
+        ListNode* pNode = NodeInLoop(pHead);
+        int count = NumNodeInLoop(pNode);
+        if(count) {
+            ListNode* pre = pHead;
+            ListNode* lat = pHead;
+            while(count--) {
+                pre = pre->next;
+            }
+            while(pre != lat) {
+                pre = pre->next;
+                lat = lat->next;
+            }
+            return pre;
+        }
+        return nullptr;
+        
+    }
+
+    int NumNodeInLoop(ListNode* pNode) {
+        if(!pNode) return 0;
+        int count = 1;
+        ListNode* tmpNode = pNode->next;
+        while(pNode != tmpNode) {
+            tmpNode = tmpNode->next;
+            count += 1;
+        }
+        return count;
+    }
+
+    ListNode* NodeInLoop(ListNode* pHead) {
+        if(!pHead || !pHead->next) return nullptr;
+        if(pHead == pHead->next) return pHead;
+        ListNode* pre = pHead;
+        ListNode* later = pHead;
+        while(pre->next->next) {
+            later = later->next;
+            pre = pre->next->next;
+            if(later == pre) {
+                return later;
+            }
+        }
+        return nullptr;
+    }
+};
