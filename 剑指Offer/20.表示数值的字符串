@@ -1,0 +1,36 @@
+"""
+Creat time: 2019-08-03 09:59
+Last modified time: 2019-08-10 18:48
+
+
+"""
+
+class Solution {
+public:
+    bool isNumeric(char* string) {
+        if(string == nullptr) return false;
+        bool flag = matchInteger(&string);
+        if(*string=='.') {
+            ++string;
+            flag = matchAbsInteger(&string) || flag;  // 注意：flag不能在前面，否则不会运行matchAbsInteger函数！
+        }
+        if(*string=='e' || *string=='E') {
+            ++string;
+            flag = flag && matchInteger(&string);
+        }
+        return flag && *string=='\0';
+    }
+
+    bool matchAbsInteger(char** string) {
+        char* before = *string;
+        while(**string!='\0' && **string>='0' && **string<='9')
+            ++(*string);
+        return *string > before;
+    }
+
+    bool matchInteger(char** string) {
+        if(**string == '-' || **string == '+')
+            ++(*string);
+        return matchAbsInteger(string);
+    }
+};
