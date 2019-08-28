@@ -1,0 +1,33 @@
+"""
+Creat time: 2019-08-26 16：31
+Last modified time: 
+
+实现一个找到栈的最小元素的函数，pop、push、min的复杂度都是O(1)。
+
+解法：使用辅助站 将当前最小元素push进辅助站中 随原始栈的pop推出
+
+"""
+
+class Solution {
+public:
+    stack<int> s;
+    stack<int> tmp;
+    void push(int value) {
+        s.push(value);
+        if(tmp.empty() || (!tmp.empty() && tmp.top() >= value))
+            tmp.push(value);
+    }
+    void pop() {
+        if(!s.empty()) {
+            if(tmp.top() == s.top())
+                tmp.pop();
+            s.pop();
+        }
+    }
+    int top() {
+        return s.top();
+    }
+    int min() {
+        return tmp.top();
+    }
+};
