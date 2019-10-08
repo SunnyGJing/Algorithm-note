@@ -1,0 +1,91 @@
+"""
+Creat time: 2019-10-06 09：39
+TimeToCode：
+Last modified time: 
+
+
+方法1：哈希表法（用hash table记录原链表节点和新链表节点的对应关系）
+方法2：巧妙（剑指offer）
+
+注意：本题不能用递归法求解，否则不满足深度复制。
+"""
+
+struct RandomListNode {
+    int label;
+    struct RandomListNode *next, *random;
+    RandomListNode(int x) :
+            label(x), next(NULL), random(NULL) {
+    }
+};
+
+class Solution_1 {
+public:
+    unordered_map<RandomListNode*, RandomListNode*> hasht;
+
+    RandomListNode* Clone(RandomListNode* pHead) {
+        if(pHead == nullptr) return NULL;
+
+        RandomListNode *result = new RandomListNode(0);
+        RandomListNode *pNode = pHead;
+        RandomListNode *rNode = result;
+
+        while(pNode!=NULL) {
+            RandomListNode *pTemp = new RandomListNode(pNode->label);
+            hasht[pNode] = pTemp;
+            rNode->next = pTemp;
+            pNode = pNode->next;
+            rNode = rNode->next;
+        }
+
+        pNode = pHead;
+        while(pNode!=NULL) {
+            if(pNode->random != NULL)
+                hasht[pNode]->random = hasht[pNode->random];
+            pNode = pNode->next;
+        }
+
+        return result->next;
+    }
+};
+
+
+class Solution_2 {
+public:
+    RandomListNode* Clone(RandomListNode* pHead) {
+        
+        if(!pHead) return nullptr;
+        RandomListNode* currNode = pHead;
+        while(currNode != NULL) {
+            RandomListNode* node = new RandomListNode(currNode->label);
+            node->next = currNode->next;
+            currNode->next = node;
+            currNode = node->next;
+        }
+        currNode = pHead;
+        while(currNode != NULL) {
+            RandomListNode* node = currNode->next;
+            if(currNode->random != NULL)
+                node->random = currNode->random->next;
+            currNode = node->next;
+        }
+        
+        RandomListNode* pCloneHead = pHead->next;
+        currNode = pHead;
+        while(currNode->next != NULL) {
+            RandomListNode* node = currNode->next;
+            currNode->next = currNode->next->next;
+            currNode = node;
+        }
+
+        return pCloneHead;
+
+        // 下面的代码为什么不对？
+        // RandomListNode* pCloneHead = pHead->next;
+        // currNode = pHead->next;
+        // while(currNode->next != NULL) {
+        //    currNode->next = currNode->next->next;
+        //    currNode = currNode->next;
+        //}
+        //return pCloneHead;
+    }
+};
