@@ -1,0 +1,59 @@
+"""
+Creat time: 2019-11-18 20：59
+TimeToCode：
+Last modified time: 
+
+给定一个字符串，输出给定字符串的全部组合数。
+
+解法1：按位数递归（https://blog.csdn.net/Hackbuteer1/article/details/7462447）
+解法2：位运算（https://blog.csdn.net/puqutogether/article/details/41693841）
+
+"""
+
+
+class Solution_1 {
+public:
+    void Combination(char *string) {
+        if(!string) return;
+
+        vector<char> result;
+        int length = strlen(string);
+        for(int i=0; i<length; i++) {
+            CombinationCore(string, i, result);
+        }
+    }
+
+    void CombinationCore(char *string, int m, vector<char> &result) {
+        if(m == 0) {
+            vector<char>::iterator it = result.begin();
+            for( ; it != result.end(); it++)
+                cout << *(it);
+            cout << endl;
+            return;
+        }
+        if(string == '\0')
+            return;
+        
+        result.push_back(*string);
+        CombinationCore(string+1, m-1, result);
+        result.pop_back();
+        CombinationCore(string+1, m, result);
+    }
+}
+
+
+class Solution_2 {
+public:
+    void Combination(char *string) {
+        if(!string) return;
+
+        int length = strlen(string)
+        for(int i = 1; i < 1<<length; i++) {
+            for(int j = 0; j<length; j++) {
+                if(i & string[j])
+                    cout << string[j];
+            } 
+            cout << endl;
+        }
+    }
+}
