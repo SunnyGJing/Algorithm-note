@@ -1,0 +1,44 @@
+"""
+Creat time: 2019-11-21 17：55
+TimeToCode：1h
+Last modified time: 
+
+给定一个长度为8的数组，把8个数字放置在正方体的顶点，
+判断能不能使得三组相对的面的顶点值的和相等。
+
+利用了八皇后的思想
+（牛客网上没有这道题，所以下面的代码是没有经过测试的）
+"""
+
+class solution {
+public:
+    bool EightVertex(int set[], int length) {
+        if(!set || length!=8) return false;
+        
+        bool result = false;
+        for(int i=0; i<length; i++) {
+            bool flag[length];
+            memset(flag,0,length);
+            EightVertexCore(set, 0, flag);
+        }
+        return result;
+    }
+
+    bool EightVertexCore(int set[], int current, bool &flag) {
+        int result = false;
+        if(current ==7) {
+            //说明8个数字排好了，前四个是一面，后四个是一面
+            if(set[0]+set[1]+set[4]+set[5] == set[2]+set[3]+set[6]+set[7]
+                && set[0]+set[2]+set[4]+set[6] == set[2]+set[4]+set[6]+set[8])
+                    result = true;
+        }
+        else {
+            for(int i=0; i<8; i++) {
+                if(flag[i]) continue;
+                flag[i] = true;
+                result = EightVertexCore(set, current+1, flag);
+            }
+        }
+        return result;
+    }
+}
