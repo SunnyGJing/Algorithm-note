@@ -4,6 +4,9 @@ TimeToCode：44m
 Last modified time: 
 
 给定一个数组，找出数组中个数超过数组长度为1的元素，没找到就输出0.
+解法1：哈希表
+解法2：先排序，再计数
+解法3：(剑指offer)目标数字出现的次数比其他所有数字出现的次数之和还要多
 """
 
 class Solution_1 {
@@ -18,7 +21,7 @@ public:
             
         for(int i=0; i<length; ++i) {
             hasht[numbers[i]] += 1;
-            if(hasht[numbers[i]] > length / 2)
+            if(hasht[numbers[i]] > length>>1)
                 return numbers[i];
         }
 
@@ -51,3 +54,38 @@ public:
         return 0;
     }
 };
+
+
+class Solution_3 {
+public:
+    int MoreThanHalfNum_Solution(vector<int> numbers) {
+        if(numbers.empty()) return 0;
+        int length = numbers.size();
+
+        int pre = numbers[0];
+        int count = 1;
+        for(int i=1; i<length; ++i) {
+            if(count == 0) {
+                pre = numbers[i];
+                count = 1;
+            }
+            else if(numbers[i] == pre)
+                ++count;
+            else 
+                --count;
+        }
+        
+        bool flag = false;
+        count = 0;
+        for(int i=0; i<length; ++i) {
+            if(numbers[i] == pre) {
+                ++count;
+                if(count > length>>1)
+                    return pre;
+            }
+        }
+        return 0;
+
+    }
+
+
