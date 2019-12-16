@@ -101,15 +101,24 @@ public:
 class Solution_2 {
 public:
     void Insert(int num) {
+        // 如果已有数据为偶数，则放入最小堆
         if(((minHeap.size() + maxHeap.size()) & 1) == 0) {
+            // 如果插入的数字小于最大堆里的最大的数，则将数字插入最大堆
+            // 并将最大堆中的最大的数字插入到最小堆
             if(maxHeap.size() > 0 && num < maxHeap[0]) {
+                // 插入数据插入到最大堆数组
                 maxHeap.push_back(num);
+                // 调整最大堆
                 push_heap(maxHeap.begin(), maxHeap.end(), less<int>());
+                // 拿出最大堆中的最大数
                 num = maxHeap[0];
+                // 删除最大堆的栈顶元素
                 pop_heap(maxHeap.begin(), maxHeap.end(), less<int>());
                 maxHeap.pop_back();
             }
+            // 将数据插入最小堆数组
             minHeap.push_back(num);
+            // 调整最小堆
             push_heap(minHeap.begin(), minHeap.end(), greater<int>());
         }
         else {
@@ -136,7 +145,7 @@ public:
             median = (minHeap[0] + maxHeap[0]) / 2;
         return median
     }
-    
+
 private:
     vector<int> minHeap;
     vector<int> maxHeap;
