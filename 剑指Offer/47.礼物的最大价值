@@ -1,0 +1,87 @@
+"""
+Creat time: 2019-12-21上午~晚上
+TimeToCode：
+Last modified time: 
+
+给定一个m*n的摆满了礼物的棋盘，礼物的价值>0。从左上角出发，每次只能向左或向下移动一格
+请计算在到达棋盘右下角时，最多能拿到多少价值的礼物。
+"""
+
+class Solution_1 {
+public:
+    int getMaxValue_solution(const int values, int rows, int cols) {
+        // 这是一个动态规划、广度优先搜索问题，可以用递归或迭代的方法解决。
+        // 递归时，MaxValue[i][j] = values[i][j] + max(MaxValue[i][j-1], MaxValue[i-1][j]);
+        // 如果j==0&&i==0，就返回values[0][0]，否则如果j<0，就找i-1，如果i<0，就找j-1；
+
+        if(values == nullptr) return -1;
+        return getMaxValue(values, rows-1, cols-1);
+
+    }
+
+    int getMaxValue(const int* values,int i, int j) {
+        if(i == 0 && j == 0) return values[0][0];
+        if(i == 0)
+            return values[i][j] + getMaxValue(value,i,j-1);
+        if(j == 0)
+            return values[i][j] + getMaxValue(value,i-1,j);
+        return values[i][j] + max(getMaxValue(i,j-1), getMaxValue(i-1,j));
+    }
+}
+
+
+class Solution_2 {
+public:
+    int getMaxValue_solution(const int values, int rows, int cols) {
+        // 但是上面的解法是自上而下的，子问题被重复地计算
+        // 本解法尝试采用迭代方法自下而上地用二维数组缓存中间子问题的结果
+
+        if(values == nullptr) return -1;
+        int maxValue[rows][cols];
+
+        for(int i=0; i<rows; ++i) {
+            for(int j=0; j<cols; ++j) {
+                if(i==0 && j==0)
+                    maxValue[i][j] = value[i][j];
+                else if(i == 0)
+                    maxValue[i][j] = values[i][j] + maxValue[i][j-1];
+                else if(j == 0)
+                    maxValue[i][j] = values[i][j] + maxValue[i-1][j];
+                else
+                    maxValue[i][j] = values[i][j] + max(maxValue[i][j-1], maxValue[i-1][j]);
+            }
+        }
+        return maxValue[rows-1][cols-1];
+
+    }
+}
+
+
+class Solution_3 {
+public:
+    queue<int> q;
+    int getMaxValue_solution(const int values, int rows, int cols) {
+        // 《剑指offer》通过减少空间复杂度，进一步优化了算法。
+        // 在solution 2的算法缓存了中间子问题的结果，尽管实际只用了(i-1,k)和(i,j-1)两个格子
+        // 观察发现，同一列上的格子，行数越大则礼物的累计价值越大
+        // 因此可以用一个一维数组来代替二维数组maxValue，即每一列只保存1个格子
+
+        if(values == nullptr) return -1;
+        int maxValue[cols];
+
+        for(int i=0; i<rows; ++i) {
+            for(int j=0; j<cols; ++j) {
+                if(i==0 && j==0)
+                    maxValue[j] = value[i][j];
+                else if(i == 0)
+                    maxValue[j] = values[i][j] + maxValue[j-1];
+                else if(j == 0)
+                    maxValue[j] = values[i][j] + maxValue[j];
+                else
+                    maxValue[i][j] = values[i][j] + max(maxValue[j-1], maxValue[j]);
+            }
+        }
+
+        return maxValue[cols-1];
+    }
+}
