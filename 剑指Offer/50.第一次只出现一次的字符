@@ -1,0 +1,84 @@
+"""
+Creat time: 2019-12-22晚上
+TimeToCode：
+Last modified time: 
+
+给定一个字符串，找出第一个不重复的字符
+"""
+
+class Solution_1 {
+public:
+    unordered_map<char, int> hasht;
+
+    char FirstNotRepeatingChar(string str) {
+        // 直观思路是建立一个unordered_map，记录字符出现的次数        
+        // 表中的key是字符串的字符元素，而表中的value是字符元素出现的次数
+        // 首先遍历字符串中的元素，并添加到表中
+        // 再遍历一遍字符串，找到并返回第一个表中value为1的key
+
+        if(str.length() == 0) return ' ';
+
+        for(int i=0; i<str.length(); ++i) {
+            if(hasht[str[i]] >= 1)
+                hasht[str[i]] += 1;
+            else
+                hasht[str[i]] = 1;
+        }
+
+        for(int i=0; i<str.length(); ++i) {
+            if(hasht[str[i]] == 1)
+                return str[i];
+        }
+        return ' ';
+    }
+};
+
+
+class Solution_2 {
+public:
+    unordered_map<char, int> hasht;
+
+    char FirstNotRepeatingChar(string str) {
+        // 更好的思路是，从后往前遍历字符串
+        // 遍历的同时检查哈希表，如果没有当前字符，就标记这个字符，并添加到哈希表中
+        // 如果当前字符已经存在并且就是标记的字符，就把标记设为空
+        // 最后返回标记
+        if(str.length() == 0) return '\0';
+
+        char element = ' ';
+        for(int i=str.length(); i>=0; --i) {
+            if(hasht[str[i]] != 1) {
+                hasht[str[i]] = 1;
+                element = str[i];
+            }
+            else if(str[i] == element)
+                element = '\0';
+        }
+        
+        return element;
+    }
+};
+
+
+class Solution_3 {
+public:
+    char FirstNotRepeatingChar(string str) {
+        // 《剑指offer》上的解法和solution_1大同小异，但考虑了空间复杂度的优化
+        // 因为数量级很小，所以用数组替代哈希表
+        // 题目中字符串的字符有256种可能，每个字符（char）是8bit
+        // 数组大小是1KB，由于是一个常数，空间复杂度是O(1)
+
+        if(str.length() == 0) return '\0';
+        char hasht[256];
+        memset(hasht, 0, 256);
+
+        for(int i=0; i<str.length(); ++i)
+                hasht[str[i]] += 1;
+
+        for(int i=0; i<str.length(); ++i) {
+            if(hasht[str[i]] == 1)
+                return str[i];
+        }
+        return '\0';
+    }
+};
