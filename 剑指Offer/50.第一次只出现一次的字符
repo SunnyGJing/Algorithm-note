@@ -34,33 +34,8 @@ public:
 };
 
 
+
 class Solution_2 {
-public:
-    unordered_map<char, int> hasht;
-
-    char FirstNotRepeatingChar(string str) {
-        // 更好的思路是，从后往前遍历字符串
-        // 遍历的同时检查哈希表，如果没有当前字符，就标记这个字符，并添加到哈希表中
-        // 如果当前字符已经存在并且就是标记的字符，就把标记设为空
-        // 最后返回标记
-        if(str.length() == 0) return '\0';
-
-        char element = ' ';
-        for(int i=str.length(); i>=0; --i) {
-            if(hasht[str[i]] != 1) {
-                hasht[str[i]] = 1;
-                element = str[i];
-            }
-            else if(str[i] == element)
-                element = '\0';
-        }
-        
-        return element;
-    }
-};
-
-
-class Solution_3 {
 public:
     char FirstNotRepeatingChar(string str) {
         // 《剑指offer》上的解法和solution_1大同小异，但考虑了空间复杂度的优化
