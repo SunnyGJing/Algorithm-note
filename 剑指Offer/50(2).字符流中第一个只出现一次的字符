@@ -3,7 +3,7 @@ Creat time: 2019-12-22晚上
 TimeToCode：
 Last modified time: 
 
-
+找出字符流中第一个只出现一次的字符，未找到时返回‘#’。
 """
 
 class Solution {
