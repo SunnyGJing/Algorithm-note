@@ -3,7 +3,7 @@ Creat time: 2019-12-22晚上
 TimeToCode：
 Last modified time: 
 
-给定一个字符串，找出第一个不重复的字符
+给定一个字符串，找出第一个没有重复出现过的字符
 """
 
 class Solution_1 {
