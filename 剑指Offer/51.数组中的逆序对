@@ -1,0 +1,56 @@
+"""
+Creat time: 2019-12-23早上~晚上
+TimeToCode：
+Last modified time: 
+
+给定一个数组，求出数组中的逆序对个数。最终结果要对1000000007取模。
+""" 
+
+class Solution {
+public:
+    int InversePairs(vector<int> data) {
+        // 直观思路是遍历数组中的每个元素，并求出排在后面的比它小的元素个数
+        // 把计算得的个数累计相加
+        // 但复杂度是O(N^2),应该找出更有效的算法，优化时间效率
+        //  《剑指offer》中的算法巧妙，思路如下：
+        // 求出子数组内部的逆序对个数，再求出子数组之间的逆序对个数
+        // 类似于归并排序
+
+        if(data.empty()) return 0;
+        // 需要一个辅助数组，因为直接对原数组排序会影响结果
+        vector<int> copy(data.begin(), data.end());
+
+        int count = InversePairCouting(data, copy, 0, data.size()-1);
+        return count;
+    }
+
+    int InversePairCouting(vector<int>& data, vector<int>& copy, int low, int high) {
+        if(high == low)
+            return 0;
+        
+        int mid = (low + high) / 2;
+        int leftCount = InversePairCouting(data, copy, low, mid);
+        int rightCount = InversePairCouting(data, copy, mid+1, high);
+        int count = 0;
+        int low1 = low, high1 = mid, low2 = mid+1, high2 = high;
+        int index1 = high1, index2 = high2, indexCopy = high2;
+
+        while(index1 >= low1 && index2 >= low2) {
+            if(data[index1] > data[index2]){
+                copy[indexCopy--] = data[index1--];
+                count += (index2 - high1);
+                count %= 1000000007;
+            }
+            else
+                copy[indexCopy--] = data[index2--];
+        }
+        while(index1 >= low1) 
+            copy[indexCopy--] = data[index1--];
+        while(index2 >= low2)
+            copy[indexCopy--] = data[index2--];
+        
+        for(int i=low1; i<=high2; ++i)
+            data[i] = copy[i];
+        return (c1 + rightCount + count) % 1000000007;
+    }
+};
