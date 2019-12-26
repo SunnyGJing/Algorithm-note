@@ -1,0 +1,67 @@
+"""
+Creat time:
+TimeToCode：
+Last modified time: 
+
+给定一棵二叉搜索树，找出第k大的结点
+
+"""
+
+/*
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+            val(x), left(NULL), right(NULL) {
+    }
+};
+*/
+
+class Solution {
+    // 看到“有序”，就想到“二分查找”
+    // 想到“二分查找”，就思考“找到哪一个唯一存在的数?”
+    // 答案是：找到某个结点，它左边的结点的个数为k-1；
+    // 思路：
+    // 从根节点开始，记它的左子数结点个数为M
+    // 如果M >= k，下一轮在左子树中找第k大的结点
+    // 如果M == k-1，直接返回根节点
+    // 如果m < k-1，下一轮在右子树中找第k-m-1大的结点
+    // 做法：
+    // 那么怎么计算每个结点的左子树节点个数呢? 结点定义里面没有这一项
+    // 《剑指offer》中的思路很简洁，如下：
+    // 用自上而下的递归法结合中序遍历，进行上述思路中的步骤
+
+    // PS:在二叉搜索树中查找第k大的结点，实际上是考察树的中序遍历
+    // 在中序遍历序列中第k个元素就是第k大的结点。
+
+
+public:
+    TreeNode* KthNode(TreeNode* pRoot, int k) {
+        if(pRoot == nullptr || k <= 0)
+            return nullptr;
+        
+        TreeNode* pNode = KthNodeCore(pRoot, k);
+        return pNode;
+    }
+    
+    TreeNode* KthNodeCore(TreeNode* pNode, int& k) {
+        TreeNode* result = nullptr;
+
+        if(pNode->left)
+            result = KthNodeCore(pNode->left, k);
+        // 如果左子树的结点数小于k，就看当前根节点
+        if(result == nullptr) {
+            if(k == 1)
+                result = pNode;
+            --k;
+        }
+        // 如果当前根节点也不是第k个，就去右子树中查找
+        if(result == nullptr && pNode->right)
+            result = KthNodeCore(pNode->right, k);
+        
+        return result;
+    }
+
+    
+};
