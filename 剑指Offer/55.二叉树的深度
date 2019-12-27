@@ -1,0 +1,42 @@
+"""
+Creat time: 2019-12-26下午~2019-12-27早上
+TimeToCode：
+Last modified time: 
+
+给定一棵二叉树，求该树的深度。
+
+"""
+
+/*
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+			val(x), left(NULL), right(NULL) {
+	}
+};*/
+
+
+class Solution {
+    // 很自然就会想到动态规划
+    // 做法如下：
+    // 如果当前节点没有左孩子也没有右孩子，就返回1
+    // 如果当前节点没有左孩子但是有右孩子，就返回右孩子的值+1
+    // 如果当前节点有左孩子但是没有右孩子，就返回左孩子的值+1
+    // 如果当前节点有左孩子也有右孩子，就返回左孩子的值和右孩子的值中比较大的那一个
+
+public:
+    int TreeDepth(TreeNode* pRoot) {
+        if(pRoot == nullptr)
+            return 0;
+        if(pRoot->left == NULL && pRoot->right == NULL)
+            return 1;
+        if(pRoot->left == NULL && pRoot->right != NULL)
+            return TreeDepth(pRoot->right) + 1;
+        if(pRoot->left != NULL && pRoot->right == NULL)
+            return TreeDepth(pRoot->left) + 1;
+        if(pRoot->left && pRoot->right == NULL)
+            return max(TreeDepth(pRoot->left), TreeDepth(pRoot->right)) + 1;
+    }
+};
