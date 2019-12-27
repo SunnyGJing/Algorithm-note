@@ -1,0 +1,126 @@
+"""
+Creat time: 2019-12-27下午
+TimeToCode：
+Last modified time: 
+
+给定一个数组，找出数组中只出现一次的两个数字。要求时间复杂度是O(N),空间复杂度是O(1)。
+
+"""
+
+class Solution_1 {
+    // 哇，太难了吧。要求了空间复杂度，就不能用哈希表；要求了时间复杂度，就不能用排序
+    // 数组的元素的取值范围也没给。。
+
+    // 突然想到一个不是特别好的解法：(此代码在牛客网没有通过！是不可取的，只是记录一下)
+
+    // 遍历数组，记当前元素值对数组长度取余的结果为M，比较当前元素和下标为M的元素，
+    // 如果相等，就把当前元素和下标为M的元素改为INT_MAX，访问下一个元素
+    // 如果不相等，就交换，继续访问当前元素
+    // 可能遇到的问题是：
+    // 1. 负数
+    // 解决方法是求绝对值
+    // 2.碰撞
+    // 解决方法是等待
+public:
+    void FindNumsAppearOnce(vector<int> data,int* num1,int *num2) {
+        if(data.empty()) return;
+
+        int length = data.size();
+        bool flag = true;
+
+        while(flag) {
+            int curIndex = 0;
+            while(curIndex < length) {
+                if(data[curIndex] == INT_MAX) {
+                    ++curIndex;
+                    continue;
+                }
+                int m = abs(data[curIndex]) % length;
+                if(data[curIndex] == data[m]) {
+                    data[curIndex] = INT_MAX;
+                    data[m] = INT_MAX;
+                    ++curIndex;
+                }
+                else {
+                    if(data[m] == INT_MAX) {
+                        data[m] = data[curIndex];
+                        data[curIndex] = INT_MAX;
+                        ++curIndex;
+                    }
+                    else if(data[m] % length != m) {
+                        int tmp = data[curIndex];
+                        data[curIndex] = data[m];
+                        data[m] = tmp;
+                    }
+                    else{
+                        // 发生了碰撞
+                        ++curIndex;
+                    }      
+                }
+            }
+            
+            bool flag = false;
+            int count = 0;
+            for(int i=0; i<length; ++i) {
+                if(data[i] != INT_MAX) {
+                    ++count;
+                    if(count == 1) 
+                        num1 = &data[i];
+                    else if(count == 2)
+                        num2 = &data[i];
+                    else {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+};
+
+
+
+class Solution_2 {
+    // 《剑指offer》上的解法很好，厉害厉害...
+    // 先思考“怎样在数组中找到唯一的出现一次的数字”，
+    // 答案是“数组中每个数字进行异或，结果就刚好是那个只出现一次的数字”。
+    // 那么本题中有两个出现一次的数字，该怎么解决呢
+    // 思路如下：
+    // 先按二进制的某一位是0/1把原数组划分为两个子数组部分
+    // 再分别在两个子数组中找出唯一的出现一次的数字
+    // 做法：
+    // 数组中每个数字进行异或，得到的结果是两个只出现一次的数字的异或结果
+    // 因为两个只出现一次的数字不相等，所以这个结果至少有一位是1，记第一个为1的位的位置为M
+    // 按第M位是否为1划分子数组，第一组的元素的M位都是0，第二组的元素的M位都是1
+    // 分别对两个子数组进行异或计算，返回取得的结果
+
+public:
+    void FindNumsAppearOnce(vector<int> data,int* num1,int *num2) {
+        if(data.empty()) return;
+
+        int xorResult = 0;
+        int length = data.size();
+        for(int i=0; i<length; ++i)
+            xorResult ^= data[i];
+        
+        int index = FindFirstIndexOf1(xorResult);
+
+        *num1 = *num2 = 0;
+        for(int i=0; i<length; ++i) {
+            if((data[i]>>index) & 1 == 1)
+                *num1 ^= data[i];
+            else
+                *num2 ^= data[i];
+        }
+    }
+
+    int FindFirstIndexOf1(int num) {
+        int index = 0;
+        while(((num & 1) == 0) && (index < 8 * sizeof(int))) {
+            num = num >> 1;
+            ++index;
+        }
+
+        return index;
+    }
+};
