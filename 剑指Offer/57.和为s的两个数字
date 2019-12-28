@@ -1,0 +1,80 @@
+"""
+Creat time: 2019-12-27晚上
+TimeToCode：
+Last modified time: 
+
+给定一个递增有序的数组，找出两个和为s的数组元素。
+
+"""
+
+class Solution_1 {
+public:
+    // 看到有序，想到二分查找，因此想到“查找哪一个唯一存在的元素”
+    // 如果确定一个元素，再去查找另一个与它和为s的元素，时间复杂度是O(nlogn)
+    // 有没有更好的时间复杂度为O(n)的方法呢
+    // 突然想到可以用哈希表，key为数字值，value为数组下标
+
+    // 做法：
+    // 遍历数组，记录在哈希表中
+    // 遍历数组，记当前元素为M，查看哈希表中有没有key为(s - M)的元素
+    // 如果有，就直接返回M和这个元素；如果没有，就继续遍历
+
+    // PS:虽然在牛客网能通过，但是这个方法没有用上“有序”这个条件
+
+    unordered_map<int, int> hasht;
+
+    vector<int> FindNumbersWithSum(vector<int> array,int sum) {
+        if(array.empty()) return vector<int>();
+
+        vector<int> result;
+
+        for(int i=0; i<array.size(); ++i)
+            hasht[array[i]] = i;
+        for(int i=0; i<array.size(); ++i) {
+            if(hasht.find(sum - array[i]) != hasht.end()) {
+                int index = hasht[sum-array[i]];
+                result.push_back(array[i]);
+                result.push_back(array[index]);
+                break;
+            }
+        }
+
+        return result;
+    }
+};
+
+
+class Solution_2 {
+public:
+    // 《剑指offer》中的解法更好一些，solution1的空间复杂度是o(n),solution2的则只有O(1)
+    // 思路如下：
+    // 因为数组是有序的，先选择两个元素，根据它们的和的大小，决定向前或向后选择元素
+    // 做法如下：
+    // 先定义两个指向数组开头和结尾的指针，记指针指向的两个元素的和为M
+    // 如果M小于s，就将前一个指针后移一位
+    // 如果M等于s，就返回当前指针指向的两个元素
+    // 如果M大于s，就将后一个指针前移一位
+
+
+    vector<int> FindNumbersWithSum(vector<int> array,int sum) {
+        if(array.empty()) return vector<int>();
+
+        vector<int> result;
+        vector<int>::iterator low = array.begin();
+        vector<int>::iterator high = array.end()-1;
+        while(*(low) < *(high)) {
+            long long m = *(low) + *(high);
+            if(m == sum) {
+                result.push_back(*(low));
+                result.push_back(*(high));
+                return result;
+            }
+            else if(m < sum)
+                ++low;
+            else
+                --high;
+        }
+
+        return result;
+    }
+};
