@@ -1,0 +1,67 @@
+"""
+Creat time:
+TimeToCode：
+Last modified time: 
+
+给定一个整数s，打印出所有和为s的连续的整数序列（至少含有两个数）
+例如，输入15，由于1+2+3+4+5 = 4+5+6 = 7+8 = 15, 所以打印1~5，4~6，7~8三个序列
+
+"""
+
+class Solution {
+    // 还是求和为s的数字，所以可以借鉴上一个题目的解决思路
+    
+    // 思路：
+    // 两个元素的和就初始化两个指针，那么三个元素的和就初始化三个指针，以此类推
+    // 直到初始化时的求得的和已经大于s，就停止指针数的增长
+
+    // 做法：
+    // 记指针数量为n，初始化n为2，逐渐递增
+    // 计算n个指针指向的元素的和，记为m
+    // 如果初始化时的m大于s，就终止递增
+    // 如果m小于s，就把这n个指针后移一位
+    // 如果m等于s，就把这n个指针指向的元素打印出来
+    // 如果m大于s，继续递增指针数量
+
+
+public:
+    void FindContinueousSequence(int sum) {
+        if(sum < 3) return;
+
+        int n = 2;
+
+        while(true) {
+            int startValue = 1;
+
+            int m = 0;
+            for(int value=1; value<n; ++value)
+                m += value;
+            if(m > sum)
+                break;
+
+            while(true){
+                // m = 0;
+                // for(int value=startValue; value<startValue + n; ++value)
+                //    m += value;
+
+                // 这是上面注释掉的三行代码的优化，用了一个小技巧
+                // 因为每次计算所有元素的和值，等于(前一次的和值) + (末尾指针指向的元素) + 1;
+                // 所以无需每次都用循环计算连续序列的和值，可以利用前一次的和值
+                m += startValue + n;
+
+
+                if(m == s) {
+                    for(int value=startValue; value<startValue + n; ++value)
+                        cout << value << ' ';
+                    cout << endl;
+                }
+                else if(m < s)
+                    ++startValue;
+                else
+                    break;
+            }
+
+            ++n;
+        }
+    }
+}
