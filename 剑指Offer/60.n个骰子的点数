@@ -1,0 +1,158 @@
+"""
+Creat time: 2019-12-28晚上~2019-12-29上午
+TimeToCode：
+Last modified time: 
+
+给定一个整数n，记n个骰子朝上一面的点数之和为s，打印出所有可能的s值出现的概率
+
+"""
+
+class Solution_1 {
+    // 可以先找出n个取值为1~6的数的排列组合，计算每个排列组合的和
+    // 以此计算出每个和值出现的次数占排列组合数量的比例
+
+    // PS:排列组合的总数是6^n
+    // PS:牛客网没有本题的测试接口，solution1不一定正确，只是记录一下
+
+
+public:
+    void PrintPribability(int number) {
+        vector<vector<int> > permutation(number+1, 0);
+
+        for(int value=1; value<=6; ++value)
+            PribabilityCore(permutation, 1, value, number);
+        
+        for(map<int,int>::iterator it=hasht.begin(); it<hasht.end(); ++it) {
+            cout << it->first << ": " << float(it->second)/float(amount) << endl;
+        }
+    }
+
+    void PribabilityCore(vector<int> permutation, int n, int value, int count) {
+        if(n == count + 1) {
+            ++ amount;
+            int sum = 0;
+            for(int i=1; i<=count; ++i)
+                sum += permutation[i];
+            if(hasht.find(sum) != hasht.end())
+                hasht[sum] += 1;
+            else
+                hasht[sum] = 1;
+        }
+        permutation[n] = value;
+        for(int next=1; next<=6; ++next ) {
+            PribabilityCore(permutation, n+1, next);
+        }
+    }
+private:
+    map<int, int> hasht;
+    int amount = 0
+}
+
+
+
+class Solution_2 {
+    // 《剑指offer》中有两个解法，第一种也是递归
+    // 思路：
+    // 用数组maxSum存放每个和值的出现次数，数组参与递归过程
+    // 当只剩最后一个骰子没有加和时，就到了递归的最后一层
+
+public:
+    int maxValue = 6;
+
+    void PrintPribability(int number) {
+        if(number < 1) return;
+
+        int maxSum = number * maxValue;
+        int* pProbabilities = new int[maxSum - number + 1];
+
+        for(int i=number; i<=maxSum; ++i)
+            pProbabilities[i - number] = 0;
+
+        Probability(number, pProbabilities);
+
+        int total = pow((double)maxValue, number);
+        for(int i=number; i<=maxSum; ++i) {
+            double ratio = (double)pProbabilities[i-number] / total;
+            cout <<i<<": "<<ratio<<endl;
+        }
+
+        delete[] pProbabilities;
+    }
+
+    void Probability(int number, int* pProbabilities) {
+        for(int i=1; i<=maxValue; ++i)
+            Probability(number, number, i, pProbabilities);
+        
+    }
+
+    void Probability(int original, int current, int sum, int* pProbabilities) {
+        if(current == 1)
+            pProbabilities[sum-original]++;
+        else {
+            for(int i=1; i<=maxValue; ++i)
+                Probability(original, current-1, i+sum, pProbabilities);
+        }
+    }
+};
+
+
+
+class Solution_3 {
+    // 《剑指offer》中的第二个解法：
+    // 递归的时间复杂度太高，考虑用动态规划进行优化
+    // 思路：
+    // 设立数组，用数组中的第n个数表示骰子点数和为n的次数；
+    // 第k次投掷骰子的数可能为1~6中的任意一个数，如果我们假设第k次投掷骰子最终
+    // 所有的和为n，那么和为n的次数就为前一次投掷（第k-1次投掷）和为n-1、n-2、
+    // n-3、n-4、n-5、n-6的次数的总和
+    // 状态转移方程为：
+    // dp[c][k]=sum(dp[c-1][k-m])   (1<=m<=6&&m<k)
+    // 第1次投掷和为1,2,3,4,5,6的次数均为1；同时第k次投掷时，和为0、1、2…k-1将不会存在
+    // 我们使用两个数组来交替进行，一个用来保存上一次投掷的和的次数，
+    // 另一个以对方为基础用来计算当前投掷和的次数。每次用flag来交替。
+
+public:
+    void PrintProbility(int number) {
+        if (number < 1)
+            return;
+
+        int* pProbabilities[2];
+        int length = g_maxValue*number + 1;
+        pProbabilities[0] = new int[length];
+        pProbabilities[1] = new int[length];
+        for (int i = 0; i < length; ++i) {
+            pProbabilities[0][i] = 0;
+            pProbabilities[1][i] = 1;
+        }
+
+        int flag = 0;
+
+        for (int i = 1; i <= g_maxValue; ++i)
+            pProbabilities[flag][i] = 1;
+
+        for (int k = 2; k <= number; ++k) {
+            for (int i = 0; i < k; ++i)
+                pProbabilities[1 - flag][i] = 0;
+
+            for (int i = k; i <= g_maxValue*k; ++i) {
+                pProbabilities[1 - flag][i] = 0;
+                for (int j = 1; j <= i && j <= g_maxValue; ++j)
+                    pProbabilities[1 - flag][i] += pProbabilities[flag][i - j];
+            }
+
+            flag = 1 - flag;
+        }
+
+        double total = pow((double)g_maxValue, number);
+        for (int i = number; i <= g_maxValue*number; ++i) {
+            double ratio = (double)pProbabilities[flag][i] / total;
+            printf("%d: %e\n", i, ratio);
+        }
+
+        delete[] pProbabilities[0];
+        delete[] pProbabilities[1];
+    }
+
+private:
+    int g_maxValue = 6;
+};
