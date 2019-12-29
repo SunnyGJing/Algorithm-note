@@ -10,6 +10,7 @@ PS: Solution_1是自己写的代码，Solution_2是书中的代码。
 """
 
 class Solution_1 {
+    // 在牛客网上没有通过，只是记录一下
 public:
     vector<int> maxHeap;
     vector<int> minHeap;
@@ -54,7 +55,7 @@ public:
         int length = maxHeap.size();
         while(true) {
             int child = pos * 2 + 1;
-            if(child >= length.size()) break;
+            if(child >= length) break;
             if(child+1<length && maxHeap[child]<maxHeap[child+1])
                 ++child;
             if(maxHeap[pos] < maxHeap[child]) {
@@ -69,7 +70,7 @@ public:
         int length = minHeap.size();
         while(true) {
             int child = pos * 2 + 1;
-            if(child >= length.size()) break;
+            if(child >= length) break;
             if(child+1<length && maxHeap[child]>maxHeap[child+1])
                 ++child;
             if(minHeap[pos] > minHeap[child]) {
@@ -81,7 +82,7 @@ public:
     }
 
     void moveToMinHeap(int num) {
-        maxHeap.push_back(minHeap[0])
+        maxHeap.push_back(minHeap[0]);
         minHeap.erase(minHeap.begin());
         minHeap.push_back(num);
         adjustMinHeap();
@@ -138,15 +139,15 @@ public:
         int size = minHeap.size() + maxHeap.size();
         if(size == 0)
             throw exception("No numbers are available");
-        int median = 0;
+        double median = 0;
         if((size & 1) == 1)
             median = minHeap[0];
         else
-            median = (minHeap[0] + maxHeap[0]) / 2;
-        return median
+            median = double(minHeap[0] + maxHeap[0]) / 2;
+        return median;
     }
 
 private:
     vector<int> minHeap;
     vector<int> maxHeap;
-}
+};
