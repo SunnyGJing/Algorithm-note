@@ -1,0 +1,79 @@
+"""
+Creat time: 2019-12-39上午
+TimeToCode：解法1耗时1h，总时长2h10m；
+Last modified time: 
+
+给定一个二维数组，数组存储了等待按特定要求对身高进行排序的人，
+指定的要求是：(h,k) h是身高，k是前面有几个身高更高或相等的人。
+Note：人数小于1100
+
+例子：
+Input:
+[[7,0], [4,4], [7,1], [5,0], [6,1], [5,2]]
+Output:
+[[5,0], [7,0], [5,2], [6,1], [4,4], [7,1]]
+
+"""
+
+class Solution_1:
+    // 只想到暴力解决方法，但时间复杂度是O(N^2)，太高了。
+    // 数组按身高从小到大排序
+    // 遍历数组，记当前指针指向的元素前面身高更高或相等的人数为M
+    // 如果M < k, 就让当前指针指向的元素不停后移，直到满足条件
+    // 如果M = k，就继续遍历
+    // 如果M > k，就让当前指针指向的元素不停前移，直到满足条件，并调整指针到该元素的新位置
+
+    def reconstructQueue(self, people):  # List[List[int]]) -> List[List[int]]
+        if not people: return []
+
+        index, length = 0, len(people)
+        people.sort()
+        while index < len(people):
+            curHeight, targetCnt = people[index][0], people[index][1]
+            cnt = [1 if p[0] >= curHeight else 0 for p in people[:index]].count(1)
+            if cnt < targetCnt:
+                targetIndex = index
+                while cnt < targetCnt and targetIndex < length:
+                    targetIndex += 1
+                    if people[targetIndex][0] >= curHeight:
+                        cnt += 1
+                if not cnt == targetCnt:
+                    return []
+                people[index:targetIndex+1] = people[index + 1:targetIndex + 1] + [people[index]]
+            elif cnt == targetCnt:
+                index += 1
+            else:
+                targetIndex = index
+                while cnt > targetCnt and targetIndex >= 0:
+                    targetIndex -= 1
+                    if people[targetIndex][0] < curHeight:
+                        cnt -= 1
+
+                if not cnt == targetIndex:
+                    return []
+
+                people[targetIndex:index + 1] = [people[index]] + people[targetIndex:index]
+
+                index = targetIndex + 1
+
+        return people
+
+
+
+class Solution_2:
+    // 《leetcode》中有非常非常赞的解法，时间复杂度O(nlogn)，空间复杂度O(n)
+    // 思路如下：
+    // 先对数组进行排序：按身高从高到低排序，如果身高相同按k从下到大排序
+    // 创建一个新数组，遍历原数组，把当前元素插入在新数组的第k位
+    // PS:之所以成立，因为小数字插入在大数字的前面，不影响大数字
+    
+    def reconstructQueue(self, people):  # List[List[int]]) -> List[List[int]]
+        if not people: return []
+
+        people.sort(key=lambda x:(-x[0], x[1]))
+
+        result = []
+        for p in people:
+            result.insert(p[1], [p[0],p[1]])
+        
+        return result
