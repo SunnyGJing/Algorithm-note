@@ -1,0 +1,16 @@
+
+Vector删除元素之pop_back(), erase(), remove():
+
+--- 1.向量函数pop_back()可以删除最后一个元素
+        vec.pop_back();
+
+--- 2.向量函数erase()可以删除由一个iterator指出的元素，也可以删除一个指定范围的元素
+        vec.erase(vec.begin());
+        vec.erase(vec.begin(), vec.begin()+3);
+
+--- 3.通用函数remove()可以删除vector中一个指定范围内的value为某值的元素
+        vec.erase(vec.begin(), vec.begin()+3, 53);
+
+
+不同的是：采用remove一般情况下不会改变容器的大小，而pop_back()与erase()等成员函数会改变容器的大小。
+不建议使用remove()函数，它只是把原本排在要删除的元素的后面的元素向前复制。
