@@ -1,0 +1,30 @@
+"""
+Creat time: 2019-12-30晚上
+TimeToCode：
+Last modified time: 
+
+
+"""
+
+class Solution {
+    // 如果遍历数组并向后查找比当前元素大的最大元素，时间复杂都会很高
+    // 考虑别的方法：
+    // 遍历数组，并记录至此最小的元素MinValue，记录至此与MinValue的最大差值MaxDiff
+    // 时间复杂度是O(n)
+
+public:
+    int MaxDiff(const int* numbers, unsigned length) {
+        if(numbers==nullptr || length<=0)
+            return 0;
+        
+        int minValue = INT_MAX, maxDiff = 0;
+        for(int i=0; i<length; ++i) {
+            maxDiff = max(maxDiff, numbers[i]-minValue);
+            minValue = min(minValue, numbers[i]);
+        }
+
+        return maxDiff;
+    }
+}
+
+
