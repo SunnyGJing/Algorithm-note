@@ -1,0 +1,68 @@
+"""
+Creat time: 2019-12-31中午~2020-1-2下午
+TimeToCode：
+Last modified time: 
+
+42.存留的雨水
+给定一个长度为n的数组，记录了n条宽为1高度不同的柱子
+求出这些柱子之间能够存留多少雨水
+Example:
+Input: [0,1,0,2,1,0,1,3,2,1,2,1]
+Output: 6
+
+"""
+
+class Solution_1:
+
+    # 直观思路是遍历数组，以当前元素为水坑中心，如果两边的元素都更大，就形成了积水的水坑
+    # 但时间复杂度是O(n^2)，在leetcode中肯定无法通过，想别的方法
+
+    # 两个指针，low代表左边的边，high代表右边的边
+    # 从(0,2)开始，维持low+1<high
+    # 只要low右边的边比它高，low就++，只要high右边的边比它高并且low值>high，high就++
+    # 计算low和high之间的水量（记得减去中间不能存水的地方）
+
+    # PS: 这个思路是错误的，因为满足条件的容器可能被水位更高的容器覆盖
+    # 错误case：[5,2,1,2,1,5]，expection：14，output：2
+    # 只是记录一下，正确的解法详见 solution 2
+
+    def trap(self, height): # List[int]) -> int
+        if not height or len(height) < 3:
+            return 0
+
+        low, high = 0, 2
+        result = 0
+        while high < len(height):
+            while high+1 < len(height) and height[low] < height[low+1]:
+                low += 1
+                high += 1
+            while high+1 < len(height) and height[high] < height[high+1]:
+                high += 1
+            water = min(height[low], height[high])
+            while low < high < len(height):
+                result += max(water-height[low], 0)
+                low += 1
+            high = low + 2
+        return result
+
+class Solution_2:
+
+    # 《leetcede》中的解法非常好
+    # 思路：用两个指针记录左右边，用当前左右边的较小边更新水位，并累计盛水量
+
+    def trap(self, height):  # List[int]) -> int
+        if not height or len(height) < 3:
+            return 0
+
+        left, right, water_level, result = 0, len(height)-1, 0, 0
+        while left < right:
+            lower = min(height[left], height[right])
+            if lower == height[left]:
+                water_level = max(water_level, height[left])
+                left += 1
+            else:
+                water_level = max(water_level, height[right])
+                right -= 1
+            result += water_level - lower
+
+        return result
