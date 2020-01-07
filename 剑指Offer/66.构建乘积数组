@@ -1,0 +1,42 @@
+"""
+Creat time: 2020-1-7下午
+TimeToCode：
+Last modified time: 
+
+给定一个长度为n的数组，创建等长的新数组，新数组的每一项是旧数组其它项的乘积
+不能使用除法。
+
+"""
+
+class Solution {
+
+    // 既然是数组的多个元素的乘积，直观思路是计算所有元素的乘积，除去不在计算范围内的元素
+    // 但题目中要求“不能使用除法”，所以这个方法不可用
+    // 最简单的暴力方法是迭代求乘积，但复杂度很高O(n^2)，有更好的方法吗？
+    
+    // 想到一个方法：
+    // 新建两个数组prior和back，分别用于记录乘积
+    // prior[i]表示A[0]*A[1]*...*A[i]; back[i]表示A[i]*A[i+1]*...A[-1];
+    // 利用动态规划，B[i] = prior[i-1] * back[i+1];
+public:
+    vector<int> multiply(const vector<int>& A) {
+        if(A.size()==0) return A;
+
+        int length = A.size();
+        vector<int> prior(length, A[0]);
+        vector<int> back(length, A.back());
+
+        for(int i=1; i<length; ++i)
+            prior[i] = prior[i-1] * A[i];
+        for(int i=length-2; i>=0; --i)
+            back[i] = back[i+1] * A[i];
+        
+        vector<int> result;
+        result.push_back(back[1]);
+        for(int i=1; i<length-1; ++i)
+            result.push_back(prior[i-1] * back[i+1]);
+        result.push_back(prior[length-2]);
+
+        return result;
+    }
+};
