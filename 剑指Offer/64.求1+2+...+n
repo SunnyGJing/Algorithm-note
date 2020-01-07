@@ -1,0 +1,129 @@
+"""
+Creat time: 2019-12-30晚上
+TimeToCode：
+Last modified time: 
+
+求1+2+……+n
+要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句(A?B:C)
+
+"""
+
+class Solution_1 {
+
+    // 好难哦
+    // 《leetcode》的解法特别巧妙！
+    // 思路：
+    // 利用编程语言中的逻辑与的短路求值特性，达到了if的同等效果
+    
+    // PS: 缺点：递归层数不能太深<3000
+public:
+    int Sum_Solution(int n) {
+        int ans = n;
+        ans && (ans += Sum_Solution(n - 1));
+
+        return ans;
+    }
+};   
+    
+
+
+// 《剑指offer》的解法1如下： 利用构造函数求解
+// 思路：
+// 利用构造函数被调用n次，达到了循环的同等效果
+// 我们可以把累加相关的代码放到构造函数里
+
+class Temp {
+public:
+    Temp() {++N; Sum+=N;}
+    static void Reset() {N=0; Sum=0;}
+    static int GetSum() {return Sum;}
+
+private:
+    static int N;
+    static int Sum;
+};
+
+int Temp::N = 0;
+int Temp::Sum = 0;
+
+class Solution_2 {
+public:
+    int Sum_Solution(int n) {
+        Temp::Reset();
+        Temp *a = new Temp[n];
+        delete []a;
+        a = nullptr;
+
+        return Temp::GetSum();
+    }
+};
+
+
+// 《剑指offer》的解法2如下： 利用虚函数求解
+// 思路：
+// 既然不能在一个函数中判断是不是该种植递归，那不妨定义两个函数
+// 一个函数充当递归函数的解，另一个函数处理终止递归的情况
+// 如何选择用到哪一个函数呢？可以用布尔变量来控制
+// 而数值变量n如何转换成布尔值呢？可以用对n做两次反运算，!!n
+
+class A;
+A* Array[2];
+
+class A{
+public:
+     virtual int Sum(int n) {
+        return 0;
+    }
+};
+
+class B: public A {
+public:
+    virtual int Sum(int n) {
+        return Array[!!n]->Sum(n-1) + n;
+    }
+};
+
+class Solution_3 {
+public:
+    int Sum_Solution(int n) {
+        A a;
+        B b;
+        Array[0] = &a;
+        Array[1] = &b;
+
+        int value = Array[1]->Sum(a);
+        return value;
+    }
+};
+
+class Solution_3 {
+    // 《剑指offer》的解法3如下： 利用函数指针求解
+    // 解法3实际上等同于解法2，只是使用指针所以更加直观
+public:
+    typedef int (*fun)(int);
+
+    int Solution_Teminator(int n) {
+        return 0;
+    }
+
+    int Sum_Solution(int n) {
+        static fun f[2] = {Solution_Teminator, Sum_Solution};
+        return n + f[!!n](n-1);
+    }
+
+
+class Solution_4 {
+    // 《剑指offer》的解法4如下： 利用模板类型求解
+    // 编译器看到模板类未显式定义的参数类型，会以该参数生成该类型的代码
+    // 直到某参数的类型已经显式定义，编译器无需生成，递归编译到此结束
+    
+    // PS:缺点 1.输入n需是在编译期间就能确定的常量，不能动态输入
+    // 2.出于递归限制，n不能太大
+public:
+
+template <int n> struct Sum_Solution { 
+    enum value {N = Sum_Solution<n-1>::N + n}; 
+};
+template <> struct Sum_Solution<1> { 
+    enum value {N = 1};
+}
