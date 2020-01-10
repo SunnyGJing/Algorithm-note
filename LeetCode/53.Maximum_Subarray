@@ -1,0 +1,58 @@
+"""
+Creat time:2020-1-9下午
+TimeToCode：
+Last modified time: 
+
+给定一个整数数组，找出最大和连续子数组(len>=1)，返回它的和
+Input: [-2,1,-3,4,-1,2,1,-5,4],
+Output: 6
+Explanation: [4,-1,2,1] has the largest sum = 6.
+
+"""
+
+
+class Solution_1:
+    # 滑动窗口问题——窗口大小可变
+    
+    # 整体思路是：先从1~n取窗口大小，再滑动窗口找到最优解
+    
+    # 解法对比：1.暴力解决是O(n^2)
+    # 2.递归回溯，仍然会有子问题重复计算的缺点
+    # 3.使用动态规划，用一维数组缓存子问题的解
+    # 4.优化动态规划，用一个变量记录前一个子问题的解
+    
+    # 具体做法：pick解法4
+    # 解法3使用一维的辅助数组，用于存储子问题的解
+    # 动态规划的状态转移方程为：max_sum[i] = nums[i]>=0 ? max_sum[i-1]+nums[i] : nums[i]
+    # 其中max_sum[i]意为以nums[i]结尾的子序列可取得的最大和
+    # 解法4是解法3的优化
+    # 动态规划的状态转移方程优化为：cur_sum = pre_sum>=0 ? pre_sum+nums[i] : nums[i]
+    
+    
+    error_flag = False
+    
+    def maxSubArray(self, nums: List[int]) -> int:
+        if not nums:
+            error_flag = True
+            return 0;
+        
+        max_sum, cur_sum = nums[0], 0
+        for n in nums:
+            if cur_sum > 0:
+                cur_sum = cur_sum + n
+            else:
+                cur_sum = n
+            max_sum = max(max_sum, cur_sum)
+        
+        return max_sum
+                
+            
+
+class Solution_2:
+
+    # 题目提示挑战分而治之的解法，我没做出来
+    # 在leetcode有很好的解法，可以去leetcode的讨论区查看，此处不做记录
+    # 简要思路为：
+    # 以mid值二分两个子数组
+    # 记从mid开始向左到0的最大和为maxL，记从mid开始向右到n-1的最大和为maxR
+    # result(0..n-1) = max(max(result(0..mid-1),result(mid+1..n-1)), maxL+maxR+nums[mid])
