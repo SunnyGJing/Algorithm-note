@@ -1,0 +1,126 @@
+"""
+Creat time:2020-1-9下午
+TimeToCode：
+Last modified time: 
+
+1005. 数组k次取反后的最大和
+给定一个整数数组，按以下方式修改数组：选择一个i并将A[i]替换为-A[i]，然后总共重复此过程K次。 
+（我们可以多次选择相同的索引i。）以这种方式修改数组后，返回数组的最大可能和。
+
+Example 1:
+Input: A = [4,2,3], K = 1
+Output: 5
+Explanation: Choose indices (1,) and A becomes [4,-2,3].
+Example 2:
+Input: A = [3,-1,0,2], K = 3
+Output: 6
+Explanation: Choose indices (1, 2, 2) and A becomes [3,1,0,2].
+Example 3:
+Input: A = [2,-3,-1,5,-4], K = 2
+Output: 13
+Explanation: Choose indices (1, 4) and A becomes 
+
+"""
+
+class Solution_1:
+    # 开始的思路是：建立大小为k的大顶堆，找出数组最小的k个数，
+    # 最后再将这k个元素取反求和，返回这个和与其它n-k个元素的和的总和。
+    # 但这是错误的，因为题目注明可以多次选择相同的索引，说明数组元素的数值在建堆过程中是动态变化的
+    
+    # 新思路：建立大小为k的大顶堆，找出数组最小的k个数，
+    # 然后再用这k个元素建立小顶堆，最后按题目要求进行k次修改堆顶元素+调整小顶堆的操作，返回数组的和。
+
+    # 优点：时间复杂度低O(max(n,2k)*logk), 空间复杂度低O(k)
+    # 缺点：过程比较复杂，要建立大顶堆找到最小的k个元素，还要再建立小顶堆按题目要求修改数组
+
+    error_flag = False
+
+    def largestSumAfterKNegations(self, A, k):
+        n = len(A)
+        if not A or k <= 0 or k > n:
+            error_flag = True
+            return 0
+
+        # 数组前k个元素建立大顶堆
+        for i in range(int(k/2-1), -1, -1):
+            self.maxHeapAdjust(A, i, k - 1)
+        # 用剩下的元素调整大顶堆
+        for i in range(k, n):
+            if A[i] < A[0]:
+                A[i], A[0] = A[0], A[i]
+                self.maxHeapAdjust(A, 0, k - 1)
+        # 改成小顶堆
+        for i in range(int(k/2-1), -1, -1):
+            self.minHeapAdjust(A, i, k - 1)
+        # 按要求修改堆顶元素
+        for i in range(k):
+            A[0] = -A[0]
+            self.minHeapAdjust(A, 0, k - 1)
+
+        return sum(A)
+
+    def minHeapAdjust(self, nums, start, end):
+        child = 2 * start + 1
+        while child <= end:
+            if child + 1 <= end and nums[child] > nums[child + 1]:
+                child += 1
+            if nums[start] <= nums[child]:
+                break
+            nums[start], nums[child] = nums[child], nums[start]
+
+            start = child
+            child = start * 2 + 1
+
+    def maxHeapAdjust(self, nums, start, end):
+        child = 2 * start + 1
+        while child <= end:
+            if child + 1 <= end and nums[child] < nums[child + 1]:
+                child += 1
+            if nums[start] >= nums[child]:
+                break
+            nums[start], nums[child] = nums[child], nums[start]
+
+            start = child
+            child = start * 2 + 1
+
+
+
+
+class Solution_2:
+
+    # 解法2是：建立大小为n的小顶堆，堆顶元素是最小的元素，
+    # 然后按题目要求进行k次修改堆顶元素+调整小顶堆的操作，返回数组的和。
+
+    # 优点：过程比较简单，只维护一个小顶堆
+    # 缺点：时间复杂度高O(nlogk), 空间复杂度高O(n)
+
+    error_flag = false
+
+    def largestSumAfterKNegations(self, A, k):
+        n = len(A)
+        if not A or k <= 0 or k > n:
+            error_flag = True
+            return 0
+
+        # 数组n个元素建立小顶堆
+        for i in range(int(n/2-1), -1, -1):
+            self.minHeapAdjust(A, i, n - 1)
+        # k次按题目要求改变堆顶(最小)的元素
+        while k:
+            k -= 1
+            A[0] = -A[0]
+            self.minHeapAdjust(A, 0, n - 1)
+
+        return sum(A)
+
+    def minHeapAdjust(self, nums, start, end):
+        child = 2 * start + 1
+        while child <= end:
+            if child + 1 <= end and nums[child] > nums[child + 1]:
+                child += 1
+            if nums[start] <= nums[child]:
+                break
+            nums[start], nums[child] = nums[child], nums[start]
+
+            start = child
+            child = start * 2 + 1
