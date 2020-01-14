@@ -1,0 +1,91 @@
+"""
+Creat time:2020-1-13晚上
+TimeToCode：
+Last modified time: 
+
+414.第三大的数
+
+给定一个非空的整数数组，找出第三大的数。如果不存在，就返回最大的数
+注意：时间复杂度需要O(n)
+
+Example 1:
+Input: [3, 2, 1]
+Output: 1
+Explanation: The third maximum is 1.
+Example 2:
+Input: [1, 2]
+Output: 2
+Explanation: The third maximum does not exist, so the maximum (2) is returned instead.
+Example 3:
+Input: [2, 2, 3, 1]
+Output: 1
+Explanation: Note that the third maximum here means the third maximum distinct number.
+Both numbers with value 2 are both considered as second maximum.
+
+"""
+
+
+class Solution:
+    # 想出三种解决方法：
+    # 1.堆排序 时间复杂度O(n)
+    # 2.三个变量记录最大的三个数 时间复杂度O(n)
+    # 3.求出max，并从数组中删除，重复上述操作3次
+
+    # 先实现解法1
+    def thirdMax(self, nums: List[int]) -> int:
+        # 题目要求不算重复的数字，所以先去重
+        nums = list(set(nums))
+
+        if len(nums) < 3:
+            return max(nums)
+        
+        self.minHeapAdjust(nums, 0, 3-1)
+        for i in range(3, len(nums)):
+            if nums[0] < nums[i]:
+                nums[0], nums[i] = nums[i], nums[0]
+                self.minHeapAdjust(nums, 0, 3-1)
+
+        return nums[0]
+
+    def minHeapAdjust(self, nums, start, end):
+        child = start * 2 + 1
+        while child <= end:
+            if child + 1 <= end and nums[child+1]<nums[child]:
+                child += 1
+            if nums[start] <= nums[child]:
+                break
+            nums[start], nums[child] = nums[child], nums[start]
+            start = child
+            child = child * 2 + 1
+
+
+class Solution:
+    
+    # 再实现解法2
+    def thirdMax(self, nums: List[int]) -> int:
+        # 初始化为最小的INT值
+        maxValue = [-sys.maxsize-1] * 3
+
+        # 记录最大的三个数
+        for n in nums:
+            for i in range(3):
+                if n > maxValue[i] and maxValue.count(n)==0:
+                    maxValue[i:] = [n] + maxValue[i:-1]
+                    break
+        
+        # 返回第三大的数，如果没有就返回最大的数
+        result = maxValue[-1]
+        if result == -sys.maxsize-1:
+            return maxValue[0]
+        return result
+
+class Solution:
+    
+    # 再实现解法3
+    def thirdMax(self, nums: List[int]) -> int:
+        nums = set(nums)
+        if len(nums) < 3:
+            return max(nums)
+        nums.remove(max(nums))
+        nums.remove(max(nums))
+        return max(nums)
