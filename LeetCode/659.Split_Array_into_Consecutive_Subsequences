@@ -1,0 +1,70 @@
+"""
+Creat time:2020-1-14上午
+TimeToCode：
+Last modified time: 
+
+659.将数组拆为连续的子序列
+
+给定一个非降序的整数数组，判断能不能拆分为至少一个长度>=3的连续整数子序列。
+
+Example 1:
+Input: [1,2,3,3,4,5]
+Output: True
+Explanation:
+You can split them into two consecutive subsequences : 
+1, 2, 3
+3, 4, 5
+Example 2:
+Input: [1,2,3,3,4,4,5,5]
+Output: True
+Explanation:
+You can split them into two consecutive subsequences : 
+1, 2, 3, 4, 5
+3, 4, 5
+Example 3:
+Input: [1,2,3,4,4,5]
+Output: False
+
+"""
+
+
+class Solution:
+    
+    # 《leetcode》中一个很好的解答：
+    # 思路：
+    # 用哈希表记录数组元素出现的次数。再遍历数组，记当前元素为num，
+    # 如果存在以num-1为终点的子序列或者哈希表中num+1、num+2的值>=1，就添加到子序列列表
+    # 否则，返回False
+    # 如果完整遍历完数组，没有不符合条件的元素，就返回True
+
+    # 这个方法很巧妙，是计数版本的贪心算法
+    # 可以拓展应用到以下题型：
+    # 题目特点1.是非连续的滑动窗口题型
+    # 题目特点2.每一个格子既可以作为窗口的起点也可以作为窗口的终点
+    # 题目特点3.当前格子附加至已有的窗口比从新创建窗口更好
+
+    def isPossible(self, nums: List[int]) -> bool:
+        left = collections.Counter(nums)
+        end = collections.Counter()
+
+        for num in nums:
+            if not left[num]: 
+                # 已经和前面的数字num-1组成子序列，跳过就好了
+                continue
+
+            left[num] -= 1
+
+            if end[num-1]:
+                # 可以附加到已有的子序列中
+                end[num-1] -= 1
+                end[num] += 1
+            elif left[num+1] and left[num+2]:
+                # 可以组成新的子序列
+                end[num+2] += 1
+                left[num+1] -= 1
+                left[num+2] -= 1
+            else:
+                # 不符合条件
+                return False
+        
+        return True
