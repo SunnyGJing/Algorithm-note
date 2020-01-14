@@ -1,0 +1,60 @@
+"""
+Creat time:2020-1-14上午
+TimeToCode：
+Last modified time: 
+
+1296.将数组划分为k个连续数的集合
+
+给定一个整数数组nums和一个整数k，判断能不能将nums划分为多个长度为k的连续数的集合。
+
+Example 1:
+Input: nums = [1,2,3,3,4,4,5,6], k = 4
+Output: true
+Explanation: Array can be divided into [1,2,3,4] and [3,4,5,6]
+
+Example 2:
+Input: nums = [3,2,1,2,3,4,3,4,5,9,10,11], k = 3
+Output: true
+Explanation: Array can be divided into [1,2,3] , [2,3,4] , [3,4,5] and [9,10,11].
+
+Example 3:
+Input: nums = [3,3,2,2,1,1], k = 3
+Output: true
+
+Example 4:
+Input: nums = [1,2,3,4], k = 3
+Output: false
+Explanation: Each array should be divided in subarrays of size 3.
+
+"""
+
+class Solution:
+    
+    # 本题和659题类似，都是求不可重叠的非连续的滑动窗口。
+    # 但是659题是不定长的窗口，本题是定长为k的滑动窗口
+    # 并且659题给定一个有序数组，本题给定一个无序数组
+
+    # 所以，代码再659题的基础上要做如下改动：
+    # 1.对于定长的滑动窗口，需要找到窗口的起点start。
+        对于本题，安全可选的start是start-1不存在的点
+    # 2.有序时，将start设为数组第一个元素是最安全的，因为它是最小的。
+        无序时，只能先判断找出多个可以安全地作为滑动窗口起始点start的元素。
+
+    def isPossibleDivide(self, nums: List[int], k: int) -> bool:
+        # 用哈希表记录元素的频次
+        count = collections.Counter(nums)
+        # 多个可以安全地作为滑动窗口起始点的元素
+        starts = {num for num in count if not count[num-1]}
+
+        while starts:
+            start = starts.pop()
+            # 注意遍历顺序是从后往前的，这是为了方便在count[i]==0而count[i+1]>0时
+            # 将i+1加入起始点候选集合中
+            for i in reversed(range(start, start+k)):
+                if count[i] < count[start]:
+                    return False
+                count[i] -= count[start]
+                if not count[i] and count[i+1]:
+                    starts.add(i + 1)
+        
+        return True
