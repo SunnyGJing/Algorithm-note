@@ -1,0 +1,68 @@
+"""
+Creat time:2020-1-13下午
+TimeToCode：
+Last modified time: 
+
+347.最频繁的k个数
+
+给定一个非空数组，找出最频繁出现的k个元素
+注意：最后输出要按出现次数从高到低排列
+
+Example 1:
+Input: nums = [1,1,1,2,2,3], k = 2
+Output: [1,2]
+Example 2:
+Input: nums = [1], k = 1
+Output: [1]
+
+"""
+
+class Solution:
+
+    # 本题是经典题型“数组最大的k个数”的升级版本
+    # 将“求数值最大”修改为“求出现次数最大”
+
+    # 思路：
+    # 用哈希表记录元素出现的次数，并用哈希表前k个元素建立小顶堆，用其余的
+    # 次数较大的元素替换堆顶元素，最后返回堆中的k个元素(按次数大到小排列)
+
+    # 时间复杂度O(nlogk)
+
+    def topKFrequent(self, nums, k):
+        # 记录元素出现的次数
+        hasht = {}
+        # 记录数组中不同元素的个数
+        count = 0
+        for num in nums:
+            hasht[num] = hasht.get(num, 0) + 1
+        for key in hasht.keys():
+            nums[count] = key
+            count += 1
+        if count < k:
+            return 0;
+
+        # 用哈希表中前k个元素建立小顶堆
+        for i in range(int(k/2-1), -1, -1):
+            self.minHeapAdjust(nums, hasht, i, k-1)
+        # 将哈希表剩下count-k个元素中较大值插入并调整小顶堆
+        for i in range(k, count):
+            if hasht[nums[i]] > hasht[nums[0]]:
+                nums[i], nums[0] = nums[0], nums[i]
+                self.minHeapAdjust(nums, hasht, 0, k-1)
+
+        # 此时，堆中存储了最频繁的k个元素，但没有按出现次数排列
+        result = sorted(nums[:k], key=lambda e:hasht[e], reverse=True)
+
+        # 返回按次数排序后的k个元素
+        return result
+    
+    def minHeapAdjust(self, nums, hasht, start, end):
+        child = start * 2 + 1
+        while child <= end:
+            if child + 1 <= end and hasht[nums[child+1]] < hasht[nums[child]]:
+                child += 1
+            if hasht[nums[start]] <= hasht[nums[child]]:
+                break
+            nums[start], nums[child] = nums[child], nums[start]
+            start = child
+            child = child * 2 + 1
