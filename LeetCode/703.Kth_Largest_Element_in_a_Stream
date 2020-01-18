@@ -1,0 +1,70 @@
+"""
+Creat time:2020-1-13晚上~2020-1-18下午
+TimeToCode：
+Last modified time: 
+
+设计一个类，返回数据流中的第k个最大的元素。
+注意：它是排序顺序中第k个最大的元素，而不是第k个不同的元素。
+
+您的KthLargest类将具有一个构造函数，该构造函数接受整数k和整数数组nums，其中nums包含流中的初始元素。
+对于每次对方法KthLargest.add的调用，数据流新增一个数字，返回数据流中第k个最大元素的元素。
+
+class KthLargest:
+
+    # 是经典题型“数组中第k大的数字”的升级版本，升级后难度没有增加很多，
+    # 只是麻烦的是，要根据数据流中已有元素的个数和k的大小进行不同的建堆调整堆操作
+
+    # 具体思路如下：
+    # 记数据流新增数据的起始下标为index，记当前数据流的元素个数为n
+    # 如果n<=k，大小为k的小顶堆还没满，直接往大小为k的小顶堆中插入nums[0..n-1]即可
+    # 如果n>k并且start<k，向堆中插入nums[start..k-1]，用nums[k..n-1]中的较大值替换堆顶元素
+    # 如果n>k并且start>=k，堆已经满了，用nums[start..n-1]中的较大值替换堆顶元素
+
+
+    def __init__(self, k: int, nums: List[int]):
+        self.nums = nums
+        self.k = k
+        self.minHeapBuild(self.nums, 0, self.k)
+
+    def add(self, val: int) -> int:
+        self.nums.append(val)
+        self.minHeapBuild(self.nums, len(self.nums)-1, self.k)
+        
+        return self.nums[0]
+        
+    def minHeapBuild(self, nums, start, k):
+        size = len(nums)
+        
+        if size <= k:
+            for i in range(int(size/2-1), -1, -1):
+                self.minHeapAdjust(nums, i, size-1)
+        elif start < k:
+            for i in range(int(k/2-1), -1, -1):
+                self.minHeapAdjust(nums, i, k-1)
+            for i in range(k, size):
+                if nums[i] > nums[0]:
+                    nums[i], nums[0] = nums[0], nums[i]
+                    self.minHeapAdjust(nums, 0, k-1)
+        else:
+            for i in range(start, size):
+                if nums[i] > nums[0]:
+                    nums[i], nums[0] = nums[0], nums[i]
+                    self.minHeapAdjust(nums, 0, k-1)
+
+                
+    def minHeapAdjust(self, nums, start, end):
+        child = start * 2 + 1
+        while child <= end:
+            if child+1<=end and nums[child+1]<nums[child]:
+                child += 1
+            if nums[start] <= nums[child]:
+                break
+            nums[start], nums[child] = nums[child], nums[start]
+
+            start = child
+            child = start * 2 + 1
+
+
+# Your KthLargest object will be instantiated and called as such:
+# obj = KthLargest(k, nums)
+# param_1 = obj.add(val)
