@@ -1,0 +1,56 @@
+"""
+Creat time:2020-1-14上午~2020-1-20上午
+TimeToCode：
+Last modified time: 
+
+969.煎饼排序
+
+给定一个数组，进行零次或多次煎饼排序使得数组有序。（煎饼排序是翻转前k个元素）
+返回存储了k值序列的数组。
+
+Example 1:
+Input: [3,2,4,1]
+Output: [4,2,4,3]
+Explanation: 
+We perform 4 pancake flips, with k values 4, 2, 4, and 3.
+Starting state: A = [3, 2, 4, 1]
+After 1st flip (k=4): A = [1, 4, 2, 3]
+After 2nd flip (k=2): A = [4, 1, 2, 3]
+After 3rd flip (k=4): A = [3, 2, 1, 4]
+After 4th flip (k=3): A = [1, 2, 3, 4], which is sorted. 
+
+Example 2:
+Input: [1,2,3]
+Output: []
+Explanation: The input is already sorted, so there is no need to flip anything.
+Note that other answers, such as [3, 3], would also be accepted.
+
+"""
+
+
+class Solution:
+
+    # 没有想出解决方法，《剑指offer》的解法很巧妙
+
+    # 思路如下：
+    # 依次让最大、第二大的数字...找到最终位置
+    
+    # 做法如下：
+    # 从i=1开始，找到第i个最大的数字，记它的下标是index
+    # 这个数字在原数组中是第index+1个数字，是第i+1大的数，所以记录index+1和i+1。
+    # 反转0到index之间的数字，使得A[index]变成第一个数
+    # 反转整个数组，让最大的数到末尾，
+    # 继续i=2，找到第i大的数字，重复上述步骤... ...
+
+
+    def pancakeSort(self, A: List[int]) -> List[int]:
+
+        result = []
+
+        B = sorted(A)
+        for i in range(len(A) - 1, 0, -1):
+            index = A.index(B[i])
+            result.extend([index + 1, i + 1])
+            A = A[:index:-1] + A[:index]
+
+        return result
