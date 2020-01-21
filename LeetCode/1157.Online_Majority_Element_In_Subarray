@@ -1,0 +1,143 @@
+"""
+Creat time:2020-1-18下午~2020-1-20晚上
+TimeToCode：
+Last modified time: 
+
+1157.子序列的线上主要元素
+
+实现类MajorityCheck
+
+Example:
+MajorityChecker majorityChecker = new MajorityChecker([1,1,2,2,1,1]);
+majorityChecker.query(0,5,4); // returns 1
+majorityChecker.query(0,3,3); // returns -1
+majorityChecker.query(2,3,2); // returns 2
+
+
+"""
+
+    # 我没有思路，《leetcode》的三种解法如下：
+
+    # 解法1：Boyer-Moore多数投票算法
+    # 但是本解法在leetcode中是超时的，没有通过。下面只是记录一下
+
+    # 时间效率低的原因是：
+    # 用哈希表记录数组中元素出现次数的操作是O(n)，尽管看起来时间复杂度不高
+    # 但query()函数是查询函数，会被多次调用，记query()函数的调用次数为k
+    # 如果把初始化哈希表的操作放在query()函数中，仅仅初始化哈希表就要n*k次操作
+    # 所以，会超过限定时间
+
+class MajorityChecker:
+
+    def __init__(self, arr: List[int]):
+        self.arr = arr
+
+    def query(self, left: int, right: int, threshold: int) -> int:
+        hasht = collections.Counter(self.arr[left:right+1])
+        
+        major_value = self.arr[left]
+        tmp_count = 1
+
+        for i in range(left+1, right+1):
+            if hasht[major_value] >= threshold:
+                return major_value
+                
+            if tmp_count == 0:
+                major_value = self.arr[i]
+                tmp_count = 1
+            elif major_value == self.arr[i]:
+                tmp_count += 1
+            else:
+                tmp_count -= 1
+        
+        return major_value if hasht[major_value] >= threshold else -1
+
+
+# Your MajorityChecker object will be instantiated and called as such:
+# obj = MajorityChecker(arr)
+# param_1 = obj.query(left,right,threshold)
+
+
+
+
+
+
+
+
+    # 《leetcode》
+    # 解法2：二分查找法
+
+    # 该算法的效率非常高，只访问占多数的那个元素，并且一旦计数达到阈值就停止访问
+
+    # 该算法的巧妙在于：
+    # 1.用元素出现的次数对数组进行排序
+    # 2.把哈希表记录元素次数的操作放在只运行依次的初始化函数中，大大优化了运行时间
+    # 利用二分查找函数bisect算得该元素某下标区间内出现的次数
+
+    # 这样就可以直接找到出现次数最多的元素了
+    # 题目要求占多数的元素的个数超过阈值下限，本算法借用二分查找函数bisect算得该元素在给定子区间内出现的次数
+
+    # collections.defaultdict(list) 的作用是用list返回的对象初始化一个字典对象
+    # bisect是二分查找函数
+    # bisect.bisect_left(a[], v)的作用是找到v在a[]中按序插入的位置下标，如果多位置可选则放在最左的位置
+    # bisect.bisect_right(a[], v)的作用是找到v在a[]中按序插入的位置下标，如果多位置可选则放在最右的位置
+
+class MajorityChecker:
+
+    def __init__(self, arr: List[int]):
+        self.loc = collections.defaultdict(list)
+        for i, n in enumerate(arr):
+            self.loc[n].append(i)    
+        self.nums = sorted(self.loc.keys(), key = lambda n: len(self.loc[n]), reverse=True)
+        
+    def query(self, left: int, right: int, threshold: int) -> int:
+        for n in self.nums:
+            if len(self.loc[n]) < threshold:
+                return -1
+            
+            l, r = bisect.bisect_left(self.loc[n], left), bisect.bisect_right(self.loc[n], right)
+            if r - l >= threshold:
+                return n
+
+        return -1
+
+
+
+
+
+
+
+
+
+    # 《leetcode》
+    # 解法3：数学概率法——随机选择
+
+    # 解法3和解法2类似，但解法3利用了数学原理
+
+    # 思路如下：
+    # 输入序列中占大多数的元素，我们有>50%的几率取到它
+    # 这里我随机取10次，因为题目说明调用query函数的次数最大为10000
+    # 而2^10远远大于10000
+    # 如果输入序列中存在一个占大多数的元素，取了10次后，我只有1/(2^10)的几率没取到它
+    # 而如果我调用query10000次，失败的平均次数为0.01次，看起来还不错
+
+    # PS: 不一定要取10次，记取得次数为k，只要2^k>>n即可
+
+
+class MajorityChecker:
+
+    def __init__(self, arr: List[int]):
+        self.arr = arr
+        self.loc = collections.defaultdict(list)
+        for i, n in enumerate(arr):
+            self.loc[n].append(i)    
+        
+    def query(self, left: int, right: int, threshold: int) -> int:
+        for _ in range(10):
+            n = self.arr[random.randint(left, right)]
+            l = bisect.bisect_left(self.loc[n], left)
+            r = bisect.bisect_right(self.loc[n], right)
+            if r - l >= threshold:
+                return n
+        return -1
+
