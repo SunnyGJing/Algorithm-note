@@ -1,0 +1,76 @@
+"""
+Creat time:2020-1-29上午
+TimeToCode：
+Last modified time: 
+
+581.最短未排序连续子数组
+
+给定一个整数数组，返回满足条件的最短的连续子数组的长度：对其排序后，整个数组有序。
+
+Example 1:
+Input: [2, 6, 4, 8, 10, 9, 15]
+Output: 5
+Explanation: You need to sort [6, 4, 8, 10, 9] in ascending order to make the whole array sorted in ascending order.
+
+"""
+
+class Solution_1:
+
+    # 我想到了用“双指针”，但做法是错误的，记录如下：
+    # 正向遍历数组，用low记录某个比它后面元素小的元素的下标
+    # 反向遍历数组，用high记录某个比它前面元素大的元素的下标
+    # 错误在于：
+    # 我只是单纯判断相邻两个元素的大小关系，由此找出子数组的边界
+    # 但是当子数组的两端只有一端不满足相邻元素递增关系时，我的方法就不适用了
+    # 例如：[2,3,4,5,1]
+
+    # 《leetcode》中的解法改正了我的错误
+    # 思路：
+    # 用“双指针”分别找出子数组的两个端点low和high
+    # 做法：
+    # 正向遍历数组，用high记录比当前最大值小的元素下标
+    # 反向遍历数组，用low记录比当前最小值大的元素下标
+
+
+    def findUnsortedSubarray(self, nums: List[int]) -> int:
+        if not nums: return 0
+
+        low, high, length = 0, 0, len(nums)
+        cur_max, cur_min = nums[0], nums[-1]
+        
+        for i in range(length):
+            cur_max = max(cur_max, nums[i])
+            if nums[i] < cur_max:
+                high = i
+        for i in range(length-1, -1, -1):
+            cur_min = min(cur_min, nums[i])
+            if nums[i] > cur_min:
+                low = i
+            
+        if high == low: return 0
+        
+        return high - low + 1
+        
+
+
+
+class Solution_2:
+
+    # 《leetcode》方法二：
+    # 找出原数组和排序后的数组不同的元素中最左和最右的两个元素
+    # 这就是子数组的边界
+
+
+    def findUnsortedSubarray(self, nums: List[int]) -> int:
+        size = len(nums)
+        if size <= 1: return 0
+
+        ordered_nums = sorted(nums)
+        low, high = 0, size-1
+        while low <= high and nums[low]==ordered_nums[low]:
+            low += 1
+        while low <= high and nums[high]==ordered_nums[high]:
+            high -= 1
+        
+        return high - low + 1
+        
