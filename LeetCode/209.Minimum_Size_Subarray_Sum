@@ -1,0 +1,44 @@
+"""
+Creat time:2020-1-29下午
+TimeToCode：
+Last modified time: 
+
+209.和值至少为正整数s的最短子数组
+
+给定一个正整数数组和一个正整数s，返回满足条件的最短的子数组的长度：和至少为s
+如果没有找到，则返回0
+
+Example: 
+Input: s = 7, nums = [2,3,1,2,4,3]
+Output: 2
+Explanation: the subarray [4,3] has the minimal length under the problem constraint.
+
+"""
+
+class Solution:
+
+    # 本题和“862.和值至少为K的最短连续子序列”是同一种类型
+    # 只是本题的输入数组只有整数，而862.的输入数组可能含有负数
+    
+    # 本题可以用简单的“双指针”方法解决，而862.只能用单调队列解决
+
+    # 做法：
+    # 用两个指针start和end记录滑动窗口的两个端点
+    # 先用end遍历数组中的每个元素，累计和值sum_value
+    # 在遍历的过程中，如果sum_value满足条件(>=s)，就用start向后遍历元素，
+    # 同时sum_value减去start指向的元素值，直到sum_value不满足条件为止。
+    # 更新min_len记录最短的满足条件的滑动窗口长度
+
+
+    def minSubArrayLen(self, s: int, nums: List[int]) -> int:
+        if not nums or s<=0: return 0;
+        sum_value, min_len, start = 0, float('inf'), 0
+
+        for end in range(len(nums)):
+            sum_value += nums[end]
+            while sum_value >= s:
+                min_len = min(min_len, end-start+1)
+                sum_value -= nums[start]
+                start += 1
+        
+        return min_len if min_len<float('inf') else 0
