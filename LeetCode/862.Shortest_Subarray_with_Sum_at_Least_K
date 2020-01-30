@@ -1,0 +1,62 @@
+"""
+Creat time:2020-1-29下午
+TimeToCode：
+Last modified time: 
+
+862.和值至少为k的最短子数组
+
+给定一个整数数组和一个整数k，返回满足条件的最短的子数组的长度：和至少为k
+如果没有找到，则返回-1
+
+Example 1:
+Input: A = [1], K = 1
+Output: 1
+
+Example 2:
+Input: A = [1,2], K = 4
+Output: -1
+
+Example 3:
+Input: A = [2,-1,2], K = 3
+Output: 3
+
+"""
+
+class Solution:
+
+    # 我想到了用“双指针”，但解答是错误的，记录如下：
+    # 分别用指针low和high记录滑动窗口的两端，先移动low增大窗口，后移动high缩小窗口
+    # 具体做法是：
+    # 递增high直到滑动窗口的元素和值大于k，递增low到满足条件的最大的low，记录当前high-low+1为min_length
+    # 再重复上述步骤，更新min_length，直到high超过了数组下标为止
+    # 我的错误在于:
+    # 本题的数组中可能含有负数，而我的解答只适用于没有负数的数组
+    # 参见“209.和值至少为s的最短子数组”
+
+
+    # 由于输入数组中可能含有负数，不能简单地用双指针地方法解决
+    #《leetcode》的解答中用到了“单调队列”
+
+    # 思路如下：
+    # 使用双端队列d模拟单调队列，存储可作为滑动窗口起点start的元素下标
+    
+    # 重点在于两个while循环，具体如下：
+    # 问题1. 滑动窗口的候选起点是非连续的，sum_value不能通过累加end的元素值或减去start的元素值进行简便计算
+    # 解法1. 先新建一个数组B，用B[i]记录数组A的前i个元素的累加和，我们可以通过B[end]-B[start]简便地求得sum_value
+    # 问题2. 对于同一个终点end，可能有多个起点start使得滑动窗口满足条件(>=s)
+    # 解法2. 在多个start满足条件时，直接忽略掉B[i]较大的start
+    # 举例2. B = [32, 24, 58, 100], s = 50。此时end为3，则start=0和start=1都满足条件,
+    #        即B[3]-B[0]>=s, B[3]-B[1]>=s，如果start=0满足条件，则start=1必然满足条件，
+    #        所以我们只留下B[i]最小的start即可。
+
+    def shortestSubarray(self, A, K):
+        N, min_len = len(A), len(A) + 1
+        d = collections.deque()
+        B = [0] * (N + 1)
+        for i in range(N): B[i + 1] = B[i] + A[i]
+        
+        for i in xrange(N + 1):
+            while d and B[i] - B[d[0]] >= K: min_len = min(min_len, i - d.popleft())
+            while d and B[i] <= B[d[-1]]: d.pop()
+            d.append(i)
+        return min_len if min_len <= N else -1
