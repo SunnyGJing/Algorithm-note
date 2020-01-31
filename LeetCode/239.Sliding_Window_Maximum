@@ -27,11 +27,11 @@ class Solution:
     
     # 《leetcode》中使用“单调队列”的方法
     # 思路：
-    # 新建一个双端队列，记录当前滑动窗口取得的最大值的下标
+    # 新建一个单调递减队列，队首元素为当前滑动窗口取得的最大值的下标
     # 遍历数组中的每个元素，
-    # 如果队列非空并且当前元素在滑动窗口中，队列前端元素出队
-    # 如果队列非空并且当前数组元素大于队尾元素，队尾元素出队
-    # 当前元素入队，记录当前最大元素的下标
+    # 如果队首元素已经不在窗口内，则队首元素出队
+    # 如果队尾元素不是当前窗口的最大值，队尾元素出队
+    # 当前元素入队，如果队列长度达到窗口长度，就可以记录下当前窗口的最大值了
 
 
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
@@ -40,12 +40,12 @@ class Solution:
         dq = collections.deque() # store index
 
         for i, num in enumerate(nums):
-            if dq and dq[0] < i-k+1:
+            if dq and dq[0] < i-k+1:  # 从队列中弹出不经不在窗口中的元素
                 dq.popleft()
-            while dq and nums[dq[-1]] < num:
+            while dq and nums[dq[-1]] < num:  # 从队列中弹出不是当前窗口最大值的元素
                 dq.pop()
             dq.append(i)
-            if i-k+1 >= 0:
+            if i-k+1 >= 0:  # 当且仅当窗口满(size=k)时，才记录结果
                 result.append(nums[dq[0]])
         
         return result
