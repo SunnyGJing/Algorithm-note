@@ -56,3 +56,48 @@ class Solution_2:
     # 以mid值二分两个子数组
     # 记从mid开始向左到0的最大和为maxL，记从mid开始向右到n-1的最大和为maxR
     # result(0..n-1) = max(max(result(0..mid-1),result(mid+1..n-1)), maxL+maxR+nums[mid])
+
+
+class Solution_3:    
+    # 拓展：题目建议挑战采用分而治之的方法
+    # 思路：切分子问题，取最大值
+    
+    error_flag = False
+    
+    def maxSubArray(self, nums: List[int]) -> int:    
+        if not nums:
+            error_flag = True
+            return 0
+
+        return max(maxSubArrayCore(nums))
+    
+    def maxSubArrayCore(self, nums: List[int]) -> int:
+        
+        mid = len(nums) // 2
+        return max(maxSubArrayCore(nums[:mid]), maxSubArrayCore(nums[mid:]))
+
+
+class Solution_4:
+
+    # 本题和 “862.和值至少为K的最短子数组” 非常相似
+    # 都是滑动窗口问题，都是含有负数的数组
+    # 所以本题也可以用“单调队列”求解 (维护了一个递增队列)
+
+    # 《leetcode》的解法如下：
+
+
+    def maxSubArray(self, nums: List[int]) -> int:
+        N, max_value = len(nums), float('-inf')
+        dq = collections.deque()
+        frontSum = [0] * (N + 1)
+        for i in range(N): frontSum[i+1] = frontSum[i] + nums[i]
+
+        for i in range(N + 1):
+            if dq and frontSum[i]-frontSum[dq[0]]>max_value:
+                max_value = frontSum[i] - frontSum[dq[0]]
+            while dq and frontSum[i]-frontSum[dq[-1]]<=0:
+                dq.pop()
+            dq.append(i)
+            
+        # 如果max_value==-inf，说明数组中全都是负数
+        return max_value if max_value>float('-inf') else max(nums)
