@@ -66,3 +66,20 @@ class Solution_2:
             result += water_level - lower
 
         return result
+
+
+class Solution_3:
+    # 《csdn博客》中的解法非常好
+    # 思路：本题为滑动窗口问题，使用"单调队列"方法，计算累计盛水量
+
+    def trap(self, height):
+        if len(height) < 3: return 0
+        
+        stack, res = list(), 0
+        for i in range(len(height)):
+            while stack and height[stack[-1]] < height[i]:
+                tmp = stack.pop()
+                if stack:
+                    res += (min(height[i],height[stack[-1]]) - height[tmp]) * (i - stack[-1] - 1)
+            stack.append(i)
+        return res
