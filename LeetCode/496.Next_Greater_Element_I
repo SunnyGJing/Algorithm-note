@@ -3,7 +3,7 @@ Creat time:2020-1-30下午
 TimeToCode：
 Last modified time: 
 
-496.下一个更大的元素_1
+496.下一个更大的元素i
 
 给定两个数组nums1和nums2，其中nums1的元素是nums2的子集，两个数组都是无重复元素的数组，
 在nums2中找出排在nums1中各个元素后面的第一个较大的元素。
