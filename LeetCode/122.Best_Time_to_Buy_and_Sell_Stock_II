@@ -40,7 +40,7 @@ class Solution:
     # 在遍历过程中，从dq中弹出比当日价格更高的日子的下标
     # 遍历结束后，max_benefit数组存储了每一天如果买入未来的最大收益，所以按项累加就是最终的结果。
 
-    # PS: 本题等同于“寻找所有的递增子序列”
+    # PS: 本题等同于“寻找所有的递增子序列，再找出满足条件的最优的子序列(本题是左右端点差值最大)”
 
     def maxProfit(self, prices: List[int]) -> int:
         if not prices: return 0
