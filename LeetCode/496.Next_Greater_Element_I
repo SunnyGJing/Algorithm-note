@@ -1,0 +1,55 @@
+"""
+Creat time:2020-1-30下午
+TimeToCode：
+Last modified time: 
+
+496.下一个更大的元素_1
+
+给定两个数组nums1和nums2，其中nums1的元素是nums2的子集，两个数组都是无重复元素的数组，
+在nums2中找出排在nums1中各个元素后面的第一个较大的元素。
+
+Example 1:
+Input: nums1 = [4,1,2], nums2 = [1,3,4,2].
+Output: [-1,3,-1]
+Explanation:
+    For number 4 in the first array, you cannot find the next greater number for it in the second array, so output -1.
+    For number 1 in the first array, the next greater number for it in the second array is 3.
+    For number 2 in the first array, there is no next greater number for it in the second array, so output -1.
+
+Example 2:
+Input: nums1 = [2,4], nums2 = [1,2,3,4].
+Output: [3,-1]
+Explanation:
+    For number 2 in the first array, the next greater number for it in the second array is 3.
+    For number 4 in the first array, there is no next greater number for it in the second array, so output -1.
+
+"""
+
+
+class Solution:
+
+    # 本题是滑动窗口问题：一个数组是另一个数组的子集
+
+    # 思路：
+    # 看到更“大”，考虑使用记录元素大小关系的“单调队列”
+    # PS: 本题中，队列元素“从大到小”排列
+    # 当前等待入队的元素要比前面的元素小，所以入队前先将较小的元素出队
+
+    # 做法：
+    # 先遍历大数组nums2，建立单调队列，同时用哈希表hasht记录nums2中排在当前元素后面的第一个较大的元素
+    # 再遍历子数组nums1，返回hasht中记录的结果
+
+
+    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        hasht, result = {}, []
+        queue = collections.deque()
+        
+        for num in nums2:
+            while len(queue) and queue[-1] < num:
+                hasht[queue.pop()] = num
+            queue.append(num)
+
+        for num in nums1:
+            result.append(hasht.get(num, -1))
+            
+        return result
