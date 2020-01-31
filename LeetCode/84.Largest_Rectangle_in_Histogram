@@ -1,0 +1,84 @@
+"""
+Creat time:2020-1-30下午
+TimeToCode：
+Last modified time: 
+
+84.直方图中最大的长方形区域
+
+给定一个长度为n的非负整数数组，数组中的元素表示直方图的块高，找出由直角块合成的最大的长方形区域。
+PS: 块宽固定为1
+
+Example:
+Input: [2,1,5,6,2,3]
+Output: 10
+
+"""
+
+
+class Solution:
+
+    # 本题是滑动窗口问题
+    # 直觉上，可以用“双指针”，也可以用“单调队列”
+
+    # 我用双指针做的，但结果是错误的！！记录如下：
+
+    # 指定两个指针start和end，表示滑动窗口的两个端点
+    # 先用end遍历数组，记当前直方块组成的最大长方形区域为cur_area
+    # 记起始直方块的下标为start，记当前较小的直方块高度为min_height
+    # 记最终最大的区域面积结果为max_area
+    # 更新min_height = min(min_height, heights[end])
+    # 更新cur_area = min_height * (end-start+1)
+    # 如果cur_area >= heights[end], 则用cur_area更新max_area, 继续遍历
+    # 如果cur_area < heights[end], 则start=end，cur_area=heights[end]，用cur_area更新max_area, 继续遍历
+
+    # 我的错误在于：
+    # 我的思维是错误的，错在没有认识到“区域[start,end]的面积小于height[end]时，区域[start+i, end]的面积可能大于height[end]
+    # 所以不可以当“区域[start,end]的面积小于height[end]”时，直接让start跳到了end
+
+
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        if not heights: return 0
+
+        start, max_area, min_height = 0, float('-inf'), float('inf')
+
+        for end in range(len(heights)):
+            min_height = min(min_height, heights[end])
+            cur_area = min_height * (end-start+1)
+
+            if cur_area >= heights[end]:
+                max_area = max(max_area, cur_area)
+            else:
+                start = end
+                cur_area = heights[end]
+                max_area = max(max_area, cur_area)
+        
+        return max_area
+
+
+
+class Solution:
+
+    # 《leetcode》的解法：单调队列
+
+    # 思路非常赞：
+    # 高度为height[i]的长方形的最短直方块就是height[i]，所以找它的前后两个端点就很容易了
+    # 向前找第一个比height[i]短的直方块，记为front
+    # 向后找第一个比height[i]短的直方块，记为back
+    # 则当前长方形的面积为height[i]*(back-front-1)
+
+    
+    def largestRectangleArea(self, height: List[int]) -> int:
+        if not height: return 0
+
+        height.append(0)
+        stack = [-1]
+        ans = 0
+        for i in range(len(height)):
+            while height[i] < height[stack[-1]]:
+                h = height[stack.pop()]
+                w = i - stack[-1] - 1
+                ans = max(ans, h * w)
+            stack.append(i)
+        
+        height.pop()
+        return ans
