@@ -28,7 +28,7 @@ Explanation: Each array should be divided in subarrays of size 3.
 
 """
 
-class Solution:
+class Solution_1:
     
     # 本题和659题类似，都是求不可重叠的非连续的滑动窗口。
     # 但是659题是不定长的窗口，本题是定长为k的滑动窗口
@@ -57,4 +57,42 @@ class Solution:
                 if not count[i] and count[i+1]:
                     starts.add(i + 1)
         
+        return True
+
+
+
+class Solution_2:
+
+    # 仿照《网上博客》的解法：
+    # 比solution_1的解法更容易理解，也更简洁
+
+    # 思路如下：
+    # 用哈希表count记录数组中元素出现的次数
+    # 每次查找符合条件地子序列都是先确定子序列的起点，那就是当前最小的数字
+    # 然后寻找剩下的k-1个数字
+
+    # 具体做法：
+    # 1.如果数组长度不是k的倍数，说明不能切分成数个长度为k的子序列，直接返回False
+    # 2.简便起见，记子序列的起点元素n在数组中出现的次数为count，那么元素n+1在数组中出现的次数必须>=count
+    #   否则说明分割子序列失败，返回False
+    # 如果数组的分割过程顺利完成，返回True
+
+
+    def isPossibleDivide(self, nums: List[int], k: int) -> bool:
+        if not nums or k > len(nums): return False
+        if len(nums) % k: return False
+
+        count = collections.Counter(nums)
+        while count:
+            start = min(count.keys())
+            count = count[start]
+            
+            for i in range(k):
+                if count[start+i] - count < 0:
+                    return False
+                if count[start+i] - count > 0:
+                    count[start+i] -= count
+                else:
+                    del count[start+i]
+            
         return True
