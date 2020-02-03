@@ -42,15 +42,17 @@ class Solution:
 
     # PS: 本题等同于“寻找所有的递增子序列，再找出满足条件的最优的子序列(本题是左右端点差值最大)”
 
+
     def maxProfit(self, prices: List[int]) -> int:
         if not prices: return 0
-
         dq = collections.deque()
         max_benefit = [0] * len(prices)
 
         for i in range(len(prices)):
-            while len(dq) and prices[i] <= prices[dq[-1]]: dq.pop()
-            if len(dq): max_benefit[dq[-1]] = max(max_benefit[dq[-1]], prices[i]-prices[dq[-1]])
+            while len(dq) and prices[i] <= prices[dq[-1]]: 
+                dq.pop()
+            if len(dq): 
+                max_benefit[dq[-1]] = max(max_benefit[dq[-1]], prices[i]-prices[dq[-1]])
             dq.append(i)
         
         return sum(max_benefit)
