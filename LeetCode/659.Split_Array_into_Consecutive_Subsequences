@@ -3,27 +3,29 @@ Creat time:2020-1-14上午
 TimeToCode：
 Last modified time: 
 
-659.将数组拆为连续的子序列
+659.将数组拆为数值连续的子序列
 
 给定一个非降序的整数数组，判断能不能拆分为至少一个长度>=3的连续整数子序列。
 
 Example 1:
-Input: [1,2,3,3,4,5]
-Output: True
-Explanation:
-You can split them into two consecutive subsequences : 
-1, 2, 3
-3, 4, 5
+    Input: [1,2,3,3,4,5]
+    Output: True
+    Explanation:
+    You can split them into two consecutive subsequences : 
+    1, 2, 3
+    3, 4, 5
+
 Example 2:
-Input: [1,2,3,3,4,4,5,5]
-Output: True
-Explanation:
-You can split them into two consecutive subsequences : 
-1, 2, 3, 4, 5
-3, 4, 5
+    Input: [1,2,3,3,4,4,5,5]
+    Output: True
+    Explanation:
+    You can split them into two consecutive subsequences : 
+    1, 2, 3, 4, 5
+    3, 4, 5
+
 Example 3:
-Input: [1,2,3,4,4,5]
-Output: False
+    Input: [1,2,3,4,4,5]
+    Output: False
 
 """
 
@@ -67,4 +69,40 @@ class Solution:
                 # 不符合条件
                 return False
         
+        return True
+
+
+
+class Solution:
+
+    # 《leetcode》中一个很好的解答：
+    # 建立哈希表，记录每个元素可以作为子序列的第i个元素
+    # 所以哈希表的key值是数组的元素值，而哈希表的value值是一个list，list里存储了该元素可作为多个子序列中的第i位元素
+    
+    # 做法如下：
+    # 使用collections模块的defaultdict方法，建立一个以list为value的哈希表。
+    # 遍历数组元素，
+    # 如果前一个元素的哈希表为空，说明当前元素是分割后子序列的首个元素，记位数为1。
+    # 如果前一个元素的哈希表不为空，说明当前元素不是子序列的首个元素，记位数为pre_small+1。
+    # 同时，要将找到的前一个元素的最小位数删除
+    #（因为该位数已经不是子序列的末尾位数了，哈希表中只存储等待后接其它元素的位数）
+    # 遍历结束后，
+    # 遍历哈希表的value，如果没有<3的位数，就说明所有的子序列的长度>=3。
+
+
+    def isPossible(self, nums: List[int]) -> bool:
+        hasht = collections.defaultdict(list)
+
+        for num in nums:
+            pre_small = 0
+            if len(hasht[num-1]) > 0:
+                pre_small = min(hasht[num-1])
+                hasht[num-1].remove(pre_small)
+            hasht[num].append(pre_small + 1)
+            
+        for values in hasht.values():
+            for v in values:
+                if v < 3:
+                    return False
+
         return True
