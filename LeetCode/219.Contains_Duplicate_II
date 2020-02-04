@@ -1,0 +1,76 @@
+"""
+Creat time:2020-2-4下午
+TimeToCode：
+Last modified time: 
+
+219.存在距离小于等于k的重复元素_Ⅱ
+
+给定一个整数数组和一个整数k，判断是否存在距离<=k的两个相等的元素
+
+Example 1:
+    Input: nums = [1,2,3,1], k = 3
+    Output: true
+
+Example 2:
+    Input: nums = [1,0,1,1], k = 1
+    Output: true
+
+Example 3:
+    Input: nums = [1,2,3,1,2,3], k = 2
+    Output: false
+
+"""
+
+class Solution_1:
+
+    # 显然是“滑动窗口问题”
+    # 看到“重复元素”，就想到“用哈希表defaultdict(list)记录每个元素的下标”
+    
+    # 具体做法：
+    # 遍历哈希表，查找是否存在距离小于k的两个下标值，返回True
+    # 如果遍历到最后都没有找到，就返回False
+
+
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        if not nums or k < 0: return False
+        
+        hasht = collections.defaultdict(list)
+        for i, num in enumerate(nums):
+            hasht[num].append(i)
+                
+        for num, index in hasht.items():
+            pre = index[0]
+            for i in range(1,len(index)):
+                if index[i] - index[i-1] <= k:
+                    return True
+                pre = index[i]
+        
+        return False
+        
+
+
+
+class Solution_2:
+
+    # PS:《网上》还有另一种“滑动窗口的解法”, 效率非常高！
+
+    # 思路如下：
+    # 看到“距离小于等于k”，就想到“长度为k的滑动窗口”
+    # 不断地滑动这个长度为k的窗口，如果窗口存在重复元素，则返回True
+    # 如果窗口滑动到尾部仍没有发现符合条件的元素存在，则返回False
+
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        if not nums or k < 0: return False
+
+        hasht = dict()
+        start, end = 0, 0
+
+        for i, num in enumerate(nums):
+            if hasht.get(num, -1) >= 0:
+                return True
+            hasht[num] = 1
+            if len(hasht) == k+1:
+                del hasht[nums[i-k]]
+        
+        return False
+            
