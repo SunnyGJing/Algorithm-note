@@ -1,0 +1,44 @@
+"""
+Creat time:2020-2-6凌晨
+TimeToCode：
+Last modified time:
+
+340.含有至多k个不同字母的最长子串
+
+给定一个字符串和一个整数k，找出所有满足条件的子字符串：含有<=k个不同字母，返回它的长度
+
+Example 1:
+    Input: A = [1,2], K = 2
+    Output: 2
+    Explanation: Subarrays formed with at most 2 different integers: [1], [2], [1,2].
+
+"""
+
+
+class Solution:
+    
+    # 《leetcode》给出了解此类题的模板
+    # 看到“k个不同字母元素”的子串，就想到下面的解法：
+
+    # 做法如下：
+    # 用双指针l和r分别记录滑动窗口的起点和终点
+    # 向后移动r，如果r指向的字母在当前窗口中是第一次出现，counter计数值加一
+    # 当counter计数值超过k时，即当前窗口含有超过k个不同的元素，不满足题目要求
+    # 向后移动l，如果l指向的字母在当前窗口中是唯一依次出现，counter计数值减一
+    # 更新最长子串长度
+
+    def lengthOfLongestSubstringKDistinct(self, s, k):
+        lookup = collections.defaultdict(int)
+        l, r, counter, res = 0, 0, 0, 0
+        while r < len(s):
+            lookup[s[r]] += 1
+            if lookup[s[r]] == 1:
+                counter += 1
+            r += 1   
+            while l < r and counter > k:
+                lookup[s[l]] -= 1
+                if lookup[s[l]] == 0:
+                    counter -= 1
+                l += 1
+            res = max(res, r - l) 
+        return res
