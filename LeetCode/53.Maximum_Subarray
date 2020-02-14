@@ -102,3 +102,22 @@ class Solution_4:
             
         # 如果max_value==-inf，说明数组中全都是负数
         return max_value if max_value>float('-inf') else max(nums)
+
+
+
+class Solution_5:
+
+    # 在《blog》中看到的非常好的解法！！
+    # 利用的是动态规划DP方法
+    # 用指针i指向滑动窗口的尾端，计算当前元素的局部最优和全局最优
+
+
+    def maxSubArray(self, nums: List[int]) -> int:
+        if len(nums)==0: return 0
+
+        maxsum, currsum = nums[0], nums[0]
+        for i in range(1,len(nums)):
+            currsum = max(nums[i], currsum + nums[i])
+            maxsum = max(maxsum, currsum)
+
+        return maxsum
