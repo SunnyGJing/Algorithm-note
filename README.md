@@ -2,28 +2,31 @@
 
 # 刷题计划与记录
 ```
-2020.02 - 2020.xx 计划：
+2020.02计划：
 周中每天刷10道题  
-周末不刷题，只做总结和复习~
+周末不刷题，只做总结和复习
+
+2020.03计划：
+每天上午做总结和复习1小时刷题3小时  
 ```
-### 2020年
-##### 二月
+## 2020年
+### 二月
 
 <details>
-<summary>-2.12 Wed. (点击查看详情)</summary>
+<summary>2.12 Wed. 未分类 [7]</summary>
 
-- [ ] 1.
-- [ ] 15.
-- [ ] 26.
-- [ ] 80.
-- [ ] 83.
-- [ ] 844.
-- [ ] 977
+- [x] 1. Two Sum
+- [x] 15. 3Sum
+- [x] 26. Remove Duplicates from Sorted Array
+- [x] 80. Remove Duplicates from Sorted Array II
+- [x] 83. Remove Duplicates from Sorted List
+- [x] 844. Backspace String Compare
+- [x] 977. Squares of a Sorted Array
 
 </details>  
 
 <details>
-<summary>2.13 Thur. 滑动窗口 [10/10] 已完成 (点击查看详情)</summary>
+<summary>2.13 Thur. 滑动窗口 [10/10] 已完成 </summary>
 
 - [x] 82. Remove Duplicates from Sorted List II  
 - [x] Google | Remove Duplicates from Unsorted Array
@@ -38,7 +41,7 @@
 </details>  
 
 <details>
-<summary>2.14 Fri. 有序多指针 [0/10]</summary>
+<summary>2.14 Fri. 有序数组多指针 [6/10]</summary>
 
 - [x] 1099. Two Sum Less Than K
 - [x] 198. House Robber
@@ -80,4 +83,36 @@
 - [x] 258. Add Digits
 - [x] 599. Minimum Index Sum of Two Lists
 - [x] 645. Set Mismatch
+</details>
+
+### 三月
+
+<details>
+<summary>3.17 Tues. 区间合并 [0] 好难啊啊啊梦魇</summary>
+
+- [ ] 729. My Calendar I
+- [ ] 731. My Calendar II
+- [ ] 732. My Calendar III
+- [ ] 435. Non-overlapping Intervals
+- [ ] 56. Merge Intervals
+- [ ] 57. Insert Interval
+- [ ] 207. Course Schedule
+- [ ] 621. Task Scheduler
+- [ ] Google - Scheduling Job Involving both RAM and CPU
+- [ ] 636. Exclusive Time of Functions
+</details>
+
+<details>
+<summary> [0] </summary>
+
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
 </details>
