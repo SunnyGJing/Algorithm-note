@@ -1,0 +1,78 @@
+"""
+Creat time:2020-2-13下午
+TimeToCode：
+Last modified time:
+
+316.删除字符串的重复元素
+
+给定一个小写字符串，修改至每个字母只出现一次
+PS: 如果有多种结果，请输出字典序最小的那一种
+
+Example 1:
+    Input: "bcabc"
+    Output: "abc"
+Example 2:
+    Input: "cbacdcbc"
+    Output: "acdb"
+
+"""
+
+class Solution:
+
+    # 最开始的思路是错误的！！！
+    # 先排序字符串，按找有序字符串去重的方法，取得结果
+    # 错误在于：
+    # “字典序”并不是简单的按顺序排列，而是要保留原先字符串中的相对位置
+    # 详见example_2
+
+    # 新的思路也是行不通的！！！
+    # 思路记录如下：
+    # 用哈希表count记录每个元素出现的个数
+    # 用哈希表pre_count记录比当前元素值小的元素个数，比如，pre_count['i']就是'a'-'h'的频次
+    # 做法如下：
+    # 还是“有序数组多指针”方法
+    # 指针a指向当前等待存放字母元素的位置，指针b指向当前要判断的字母元素
+    # 用指针b遍历数组，进行如下判断：
+    # 如果count[b]==1，即它的后面不再有b元素，直接赋值result[a] = s[b]，a++，b++
+    # 如果count[b]>1并且pre_count[b]==0，即当前就是字典序最小的位置，直接赋值result[a] = s[b]，a++，b++
+    # 如果count[b]>1并且pre_count[b]>0，即当前不是字典序最小的位置，就要b++
+    # PS:由于python中的字符串不支持原地修改，要新建存放结果的字符串result
+    # 错误地原因：
+    # 我们每次遍历完一个元素时，不仅要count[b]--,还要pre_count['a' ... b]--，这是十分复杂的
+
+    # 《leetcode》中的解决方案是“栈”
+    # 如何考虑到用栈呢？因为我们从前向后遍历数组，而当前元素是否被删除是和后面的元素相关的(比如说如果当前元素在后面将不再出现，就不能删除)
+    # 这和栈的机制十分相似，也就是说当前遍历到的元素暂时性地存储在栈中
+    # 具体做法如下：
+    # 用“双端队列”模拟栈stack，双端队列中的元素是递增的
+    # 用哈希表count记录每个元素的频次
+    # 用集合visited记录当前已经添加至结果序列中的字符
+    # 遍历字符串，如果当前元素不是最后一次出现并且char<stack[-1]，那么就删除栈顶元素，直到char>stack[-1]，char入栈
+    # 同时，要记得更新集合visited
+
+    # 举例说明上面的思路
+    # 比如'bcabc'：
+    #   1.encountered b, [good] --store it [we have nothing, let's start with this character]
+    #   2.encountered c, -- store it too [this is bigger than last one --> good! (lexicographically)]
+    #   3.encountered a, [this is smaller than the ones we have come across in the past, right? If we 
+    #       skip all the past ones because they were bigger than current and also presume that they 
+    #       appear in the future than this is a good candidate to start with.]
+    #       -->>Its very clear now, that a stack would be a good DS to use here or perhaps one of the 
+    #       better choices if not the best.
+    #   4.encountered b, [good] -- store it [lexicographically preffered candidate when compared to 
+    #       last item in the stack -- 'a']
+    #   5....... and keep going on till the string ends; we now have the required string in the stack.
+
+
+    def removeDuplicateLetters(self, s: str) -> str:
+        min_dq, count, visited = collections.deque(), collections.Counter(s), set()
+
+        for ch in s:
+            count[ch] -= 1
+            if ch in visited: continue
+            while min_dq and ch < min_dq[-1] and count[min_dq[-1]] > 0:
+                visited.remove(min_dq.pop())
+            min_dq.append(ch)
+            visited.add(ch)
+        
+        return "".join(min_dq)

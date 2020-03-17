@@ -1,0 +1,45 @@
+"""
+Creat time:2020-2-13晚上
+TimeToCode：
+Last modified time:
+
+560.和值为k的子数组
+
+给定一个整数数组和一个整数k，计算有多少个符合条件的子数组：元素之和等于k
+
+Example 1:
+    Input:nums = [1,1,1], k = 2
+    Output: 2
+
+"""
+
+
+class Solution:
+
+    # 本题和“325.和值为k的最长子数组”非常类似，所以收到了启发
+    # 同样地使用“哈希表”方法
+    # PS:再次强调：查找某个数，就要往用哈希表的方法上靠拢
+
+    # 具体做法如下：
+    # 用哈希表pre_sum记录前缀和等于key的个数
+    # 用sum_v记录当前已经累加得到的前缀和值
+    # 遍历数组，如果(sum_v-k)存在于哈希表中，说明找到了符合条件的多个子数组
+    # 有多个符合条件的子数组呢，这个个数等于哈希表的值，所以count += hasht[sum_v-k]
+    
+    # 注意: 
+    # pre_sum[0].append(1) 这行代码一定不要忘记写呀！
+    # 如果当前的前缀和刚好等于k，那就说明找到了一个符合条件的子数组，count计数器加一
+    
+    def subarraySum(self, nums: List[int], k: int) -> int:
+
+        count, sum_v = 0, 0
+        pre_sum = {}
+
+        pre_sum[0] = 1
+        for i in range(len(nums)):
+            sum_v += nums[i]
+            if sum_v - k in pre_sum.keys():
+                count += pre_sum[sum_v - k]
+            pre_sum[sum_v] = pre_sum.get(sum_v, 0) + 1
+        
+        return count

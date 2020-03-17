@@ -1,0 +1,108 @@
+"""
+Creat time:2020-2-13晚上
+TimeToCode：
+Last modified time:
+
+152.最大乘积子数组
+
+给定一个整数数组nums，寻找符合条件的连续子数组：乘积最大并且长度>=1
+
+Example 1:
+    Input: [2,3,-2,4]
+    Output: 6
+    Explanation: [2,3] has the largest product 6.
+Example 2:
+    Input: [-2,0,-1]
+    Output: 0
+    Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
+
+"""
+
+class Solution_1:
+
+    # 这是“滑动窗口”问题，最开始的思路是错误的！！！
+    # 这道题看起来和“53. 最大和值子数组”一样，于是想到了下面的错误思路：
+    # 数组中可能包含负数，所以使用前缀乘积数组以及“双端队列”方法
+    
+    # 自我分析：
+    # 第53题是求最大和值，而本题是求最大乘积。两题是有本质区别的
+    # 在对负数的处理上，求和时，加上一个负数，总和一定变小；
+    # 而乘上一个负数，结果可能变大也可能变小（负数乘以负数结果会变大）
+
+    # 《blog》思路如下：
+    # 新建2个变量，一个代表区间内最大乘积max，另一个代表区间内最小乘积min
+    # 我们从数组第二个数字开始循环，当前数字与前区间能形成的最大乘积，一定在下面三个元素中产生：
+    #   1. 当前数字num自身
+    #   2. 当前数字num * max
+    #   3. 当前数字num * min
+    # 用三个数的最大值更新max，最小值更新min，用max更新全局最大区间乘积
+    # 然后继续向后循环，找到一个全局最大区间乘积即可。
+
+    # PS: for循环里max_v和min_v的更新复制不能拆成两行代码来写
+    # 因为他们的值之间是有关系的，必须一起更新，不能先更新一个再更新另一个
+
+
+    def maxProduct(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n == 0: return 0
+        
+        max_v, min_v, result = nums[0], nums[0], nums[0]
+        for i in range(1, n):
+            max_v, min_v = max(nums[i], nums[i]*max_v, nums[i]*min_v), min(nums[i], nums[i]*max_v, nums[i]*min_v)
+            result = max(max_v, result)
+        
+        return result
+
+
+
+class Solution_2:
+
+    # 《leetcode》中的解法和solution_1有点像，记录如下：
+
+
+    def maxProduct(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n == 0: return 0
+
+        result, min_v, max_v = nums[0], nums[0], nums[0]
+        for i in range(1, n):
+            if nums[i] < 0:
+                min_v, max_v = max_v, min_v
+            
+            max_v = max(nums[i], nums[i]*max_v)
+            min_v = min(nums[i], nums[i]*min_v)
+            result = max(result, max_v)
+        
+        return result
+
+    
+
+class Solution_3:
+
+    # 《leetcode》中的另一个解法非常赞！！
+
+    # 网友的解释如下：
+    # 1. 为什么计算前缀乘积nums和后缀乘积nums_rev？
+    #   如果数组中没有零，则乘积最大的子数组必须从第一个元素开始或最后一个元素结束。
+    #   因此，最大乘积必须是一些前缀乘积或后缀乘积。
+    # 2.为什么返回前缀乘积nums和后缀乘积nums_rev的最大值？
+    #   假设有一个子数组nums[i：j]，内部元素的乘积为P。
+    #   以P> 0为例，如果nums[i]> 0 或nums[j]> 0，那么显然，我们应该扩展此子数组以包含nums[i]或nums[j];
+    #   如果nums[i]和nums[j]均为负，则将该子数组扩展为同时包括nums[i]和nums[j]，以获得更大的乘积。
+    #   重复此过程，最终我们将到达nums的开头或结尾。
+    # 3.代码中的‘or 1’什么意思？
+    #   它的作用等同于 nums[i-1] != 0: nums[i] *= nums[i-1]
+    #   处理前缀数组和后缀数组中的零元素
+    #   比如某个前缀乘积为0时，我们重新开始并从当前元素计算前缀。
+
+
+    def maxProduct(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n == 0: return 0
+
+        nums_rev = nums[::-1]
+        for i in range(1, n):
+            nums[i] *= nums[i-1] or 1
+            nums_rev[i] *= nums_rev[i-1] or 1
+            
+        return max(nums + nums_rev)

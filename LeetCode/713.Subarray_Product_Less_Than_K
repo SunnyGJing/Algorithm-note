@@ -1,0 +1,76 @@
+"""
+Creat time:2020-2-13下午
+TimeToCode：
+Last modified time:
+
+713.寻找乘积小于k的子数组
+
+给定一个正整数数组nums，返回符合条件的连续子数组的个数：乘积小于k
+Example 1:
+    Input: nums = [10, 5, 2, 6], k = 100
+    Output: 8
+    Explanation: The 8 subarrays that have product less than 100 are: 
+                 [10], [5], [2], [6], [10, 5], [5, 2], [2, 6], [5, 2, 6].
+                 Note that [10, 5, 2] is not included as the product of 
+                 100 is not strictly less than k.
+
+"""
+
+class Solution_1:
+
+    # 这是“滑动窗口”问题，数组元素都是整数，所以可以用“双指针”方法
+
+    # 最开始的思路是错误的！！！！
+    # (在leetcode测试会超时)
+    # 反思自己：一段时间没写“滑动窗口”的题目，就忘记双指针的标准写法了
+    # 错误思路如下：
+    # 用result记录符合条件的滑动窗口(连续子数组)的个数
+    # 用指针start指向窗口起点，用指针end指向窗口终点
+    # 用product记录当前滑动窗口的累计乘积
+    # 用start遍历数组，令end=start+1，向后移动end直到滑动窗口乘积>=k
+    # 此时，以start为起点的满足条件的滑动窗口共有(end-start)个，那么result+=end-start
+    # PS: 如果起点start已经不满足条件了，就要跳过以start为起点的滑动窗口
+
+    # 下面是错误的，没有测试通过的代码！！！
+    # 只是记录一下
+
+
+    def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        if n == 0 or k <= 0: return 0
+
+        count = 0
+        for start in range(n):
+            product, end = 1, start
+            while end < n and product * nums[end] < k:
+                product *= nums[end]
+                end += 1
+            count += end - start
+
+        return count
+
+
+class Solution_2:
+
+    # 正确思路是：
+    # 在solution_1的基础上做如下改动：
+    # 1.用end来遍历数组，而不是start！！
+    # 2.新窗口的乘积不是直接计算的，应该利用前一个滑动窗口的乘积结果！
+    # 3.如果当前乘积大于目标值，就要向后移动start直到满足条件为止！！
+
+    # 上述思路才是“滑动窗口问题”的标准写法
+
+
+    def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        if n == 0 or k <= 0: return 0
+
+        count, product, start = 0, 1, 0
+        for end in range(n):
+            product *= nums[end]
+            while start <= end and product >= k:
+                product /= nums[start]
+                start += 1
+            count += j - i + 1
+        
+        return count

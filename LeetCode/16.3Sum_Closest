@@ -1,0 +1,52 @@
+"""
+Creat time:2020-2-13下午
+TimeToCode：
+Last modified time:
+
+16.寻找最接近目标值的三数之和
+
+给定一个含n个整数的数组和一个整数target，在数组中找出符合条件的三个数：三数之和最接近target，并返回三数之和
+PS: 每个输入都有唯一输出结果
+
+Example:
+    Input：nums = [-1, 2, 1, -4], target = 1.
+    Output：2. (-1 + 2 + 1 = 2).
+
+"""
+
+
+class Solution:
+
+    # 本题和“15.寻找等于零的三数之和”非常相似
+    # 要找出符合条件的三个数，直观思路是用“有序数组的多指针”方法
+    # 由于输入数组是无序的，所以先对其进行排序
+    
+    # 思路如下：
+    # 用三个指针a,b,c记录目标数字
+    # 用closest记录最接近target的和值
+    # 先用指针a遍历排序后的数组，设b=a+1,c=n-1，移动b和c寻找距离target最小的三数之和
+    
+    # 具体做法如下：
+    # 如果当前三数之和<target，就向后移动b
+    # 如果当前三数之和>target，就向前移动c
+    # 如果当前三叔hi和=target，就停止寻找
+
+
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        n = len(nums)
+        if n < 3: return 0
+
+        nums.sort()
+
+        closest = sum(nums[:3])
+        for a in range(n-2):
+            b, c = a + 1, n - 1
+            while b < c:
+                sum_v = nums[a] + nums[b] + nums[c]
+                closest = sum_v if abs(sum_v - target) < abs(closest - target) else closest
+                
+                if sum_v == target: break
+                elif sum_v < target: b += 1
+                else: c -= 1
+        
+        return closest

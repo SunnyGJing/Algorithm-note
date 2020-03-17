@@ -1,0 +1,51 @@
+"""
+Creat time:2020-2-13晚上
+TimeToCode：
+Last modified time:
+
+325.和值为k的最长子数组
+
+给定一个数组和一个整数k，求出符合条件的最长的子数组：所有元素之和等于k
+PS: 没找到就返回0
+Example:
+    Input: nums = [1, -1, 5, -2, 3], k = 3
+    Output: 4
+    Explanation: The subarray [1, -1, 5, -2] sums to 3 and is the longest.
+Example 2:
+    Input: nums = [-2, -1, 2, 1], k = 1
+    Output: 2
+    Explanation: The subarray [-1, 2] sums to 1 and is the longest.
+"""
+
+class Solution:
+
+    # 最开始的思路是错误的！！！
+    # 本题和“862.和值至少为k的最短子数组”十分类似
+    # 同样是“滑动窗口”问题，就考虑用“前缀和值数组”和“双端队列”方法
+    # 反思：没有考虑到有了前缀和数组，我们的目标变成了“查找数组中的某个数”，用哈希表即可解决，无需使用双端队列
+
+    # 正确的《blog》的方法是“哈希表”！！！
+    # 思路如下：
+    # 用哈希表hasht来保存前缀和值和坐标值的映射
+    # 遍历数组，去查hasht是否存在当前和值hasht[i]与k的差，如果存在说明找到了子序列
+    # 当然可能存在多个有相同的和, 由于我们要最长的子数组，所以肯定是留着最前面的一个值更优.
+    # PS: 所以哈希表的value没有必要用index list，我们只要记住第一个index，所以用普通的hasht即可
+
+
+    def maxSubArrayLen(self, nums, k):
+        n = len(nums)
+        if n == 0: return 0
+
+        hasht, sum_v, max_len = {}, 0, 0
+
+        for i in range():
+            sum_v += nums[i]
+            if sum_v - k in hasht.keys():
+                max_len = max(max_len, i-hasht[sum_v-k])
+            if not sum_v in hasht.keys():
+                hasht[sum_v] = i
+        
+        return max_len
+        
+        
+        
