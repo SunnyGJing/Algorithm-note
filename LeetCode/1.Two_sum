@@ -1,0 +1,36 @@
+"""
+Creat time:2020-2-11上午
+TimeToCode：
+Last modified time:
+
+1.找出和值为目标数值的一对数字
+
+给定一个整数数组和一个数字target，找出数组中两个数字的下标：它们的和等于target
+PS: 每个输入都有唯一对应的输出
+
+Example:
+
+    Given nums = [2, 7, 11, 15], target = 9,
+
+    Because nums[0] + nums[1] = 2 + 7 = 9,
+    return [0, 1].
+
+"""
+
+class Solution:
+
+    # 用hash判断过去是否存在某元素，使得此元素和当前元素的和等于target
+    # 注意: return不能只写在条件语句里，可以在条件语句外面返回空{}
+
+
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        n = len(nums)
+        if n == 0: return []
+
+        hasht = {}
+        for (i, num) in enumerate(nums):
+            num_2 = target - num
+            if num_2 in hasht.keys(): return [hasht[num_2], i]
+            else: hasht[num] = i
+        return []
+

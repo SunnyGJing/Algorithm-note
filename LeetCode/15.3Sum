@@ -1,0 +1,99 @@
+"""
+Creat time:2020-2-7晚上
+TimeToCode：
+Last modified time:
+
+15.寻找等于零的三数之和
+
+给定一个长度为n的正数数组，找出所有符合条件的三元素组合：a+b+c=0
+
+Example:
+
+    Given array nums = [-1, 0, 1, 2, -1, -4],
+
+    A solution set is:
+        [[-1, 0, 1],
+        [-1, -1, 2]]
+
+"""
+
+class Solution_1:
+
+    # 下面的代码是错误的，只记录一下
+
+    # 直观思路是利用哈希表，时间复杂度是O(n^2)
+    # 错误在于：
+    # 时间复杂度过高！
+
+    # 分析：
+    # 本题中，要去除重复答案
+    # python语言不能直接支持二维数组的去重，为了实现这个功能，时间复杂度达到o(n^3)
+
+
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        length = len(nums)
+        if length == 0: return []
+        
+        result = []
+        hasht = collections.Counter(nums)
+        for i in range(length):
+            for j in range(i+1, length):
+                target =-1 * (nums[i] + nums[j])
+                tmp = sorted([nums[i], nums[j], target])
+                if hasht[target] > 0 and result.count(tmp)==0:
+                    if hasht[target] >= tmp.count(target):
+                        result.append(tmp)        
+        
+        return result
+
+
+
+class Solution_2:
+
+    # 《leetcode》中的解答
+
+    # 思路如下：
+    # 看到题目要求“找到符合条件的多个元素”，想到“有序多指针”解法模式
+    # PS:输入数组是无序的，所以先排序
+
+    # 具体做法：
+    # 数组按递增顺序排序后，遍历数组
+    # 当前遍历的元素为三个元素中较小的一个，记为cur，向后找另两个元素
+    # 将后两个元素low和high分别初始化为cur+1和length-1.
+    # 会出现如下几种情况：
+    # 情况1.cur元素>0，再向后遍历也找不到符合条件的元素了，此时直接break循环即可
+    # 情况2.cur元素==cur-1元素，为了避免添加重复的答案，此时直接continue跳过即可
+    # 情况3.三个元素的和<0，说明low不够大，向后
+    # 情况4.三个元素的和>0，说明high太大，向前
+    # 情况5.三个元素的和==0，说明符合条件，添加至result，并继续low向后high向前查找其它组合
+    #       （还要注意跳过重复的答案）
+
+
+	def threeSum(self, nums):
+		length = len(nums)
+        if length < 3: return []
+
+        nums.sort()
+       
+        res = []
+        for cur in range(length-2):
+            if nums[cur] > 0: break
+            if cur > 0 and nums[cur] == nums[cur-1]: continue
+
+			low, high = cur+1, length-1
+			while low < high:
+				total = nums[cur] + nums[low] + nums[high]
+
+				if total < 0:
+					low += 1
+				elif total > 0:
+					high -= 1
+				else:
+					res.append([nums[cur], nums[low], nums[high]])
+					while low < high and nums[low] == nums[low+1]:
+						low += 1
+					while low < high and nums[high] == nums[high-1]:
+						high -= 1
+					low += 1
+					high -= 1
+		return res

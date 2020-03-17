@@ -1,0 +1,100 @@
+"""
+Creat time:2020-2-7晚上
+TimeToCode：
+Last modified time:
+
+977.为有序数组的平方数组排序
+
+给定一个递增的整数数组A，返回满足条件的数组：是数组A各元素的平方，并按递增排序
+
+Example 1:
+    Input: [-4,-1,0,3,10]
+    Output: [0,1,9,16,100]
+
+Example 2:
+    Input: [-7,-3,2,3,11]
+    Output: [4,9,9,49,121]
+
+"""
+
+class Solution_1:
+
+    # 这是“多指针”问题
+
+    # 思路如下：
+    # 指针a和b分别指向最大的负数和最小的正数(或0)，根据它们的平方值判断大小
+    # 将平方值较小的插入目标数组，并且移动对应的指针
+
+    # 具体做法：
+    # 先从头开始遍历，先寻找a和b的目标值
+    # 此时，将发生三种情况：
+    # 情况1.数组全都是负数，那么b将超出数组下标范围，此时直接返回反转后的数组A的平方数组
+    # 情况2.数组全都是正数(含0)，那么a将超出数组下标范围，此时直接返回数组A的平方数组
+    # 情况3.数组有正(含0)有负，此时按照合并两个有序数组的方法创建目标数组
+
+
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+        length = len(nums)
+        if length == 0: return []
+
+        a, b = 0, 0
+        while a < length and nums[a] < 0:
+            a += 1
+            b += 1
+        a -= 1
+        
+        if a == -1:
+            return [num ** 2 for num in nums]
+        if b == length:
+            return [num ** 2 for num in reversed(nums)]
+        
+        result = []
+        while a >= 0 and b <= length-1:
+            if abs(nums[a]) <= abs(nums[b]):
+                result.append(nums[a] ** 2)
+                a -= 1
+            else:
+                result.append(nums[b] ** 2)
+                b += 1
+        if a >= 0:
+            result.extend([num ** 2 for num in nums[a::-1]])
+        if b <= length-1:
+            result.extend([num ** 2 for num in nums[b:]])
+        
+        return result
+
+
+
+class Solution_2:
+
+    # 《leetcode》中非常赞的解法~
+
+    # 思路如下：
+    # 指针a和b分别指向数组的两端，即a指向最小的数，b指向最大的数
+    # a和b越靠近数组中心(值为0)，它的平方值越小
+    # （这个想法太秒了~~~）
+    # 所以借助双端队列，每次都往队列的首部添加
+
+    # 具体做法：
+    # 初始化a和b分别为0和length-1
+    # 此时，将发生两种情况：
+    # 情况1.abs(a)<abs(b)，此时在队列首部加入a^2，向后移动a
+    # 情况2.abs(a)>abs(b)，此时在队列首部加入b^2，向前移动b
+    # 最后将双端队列转换为list
+
+
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+        length = len(nums)
+        if length == 0: return []
+
+        answer = collections.deque()
+        l, r = 0, length - 1
+        while l <= r:
+            left, right = abs(nums[l]), abs(nums[r])
+            if left > right:
+                answer.appendleft(left * left)
+                l += 1
+            else:
+                answer.appendleft(right * right)
+                r -= 1
+        return list(answer)

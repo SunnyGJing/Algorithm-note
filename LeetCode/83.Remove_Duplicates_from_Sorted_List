@@ -1,0 +1,52 @@
+"""
+Creat time:2020-2-12下午
+TimeToCode：
+Last modified time:
+
+83.删除有序链表的重复元素
+
+给定一个链表，删除链表中重复的元素使得每个元素只出现一次，返回修改后的新链表。
+
+Example 1:
+    Input: 1->1->2
+    Output: 1->2
+Example 2:
+    Input: 1->1->2->3->3
+    Output: 1->2->3
+
+"""
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+
+    # 非常简单，和“26.删除有序数组的重复元素”类似
+    
+    # 对应的解决思路是：“有序数组的多指针”
+    
+    # 做法如下：
+    # 指针a指向链表头部，指针b指向当前等待判断的位置下标
+    # 用指针b遍历链表中的每个元素
+    # 如果a元素不等于b元素，说明b指向的元素不是要删除的元素，那么赋值a->next=b
+    # 如果a元素等于b元素，说明b指向的元素是要删除的元素，那么b指针向后查找
+    # 查找结束后，a指向了最后一个不重复的元素，必须要赋值a->next=None
+    # PS:因为a的后面还跟着许多结点，必须要将它们剪掉
+
+
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        if not head: return head
+
+        a, b = head, head
+        while b:
+            if a.val != b.val:
+                a.next = b
+                a = a.next
+            while b and a.val == b.val:
+                b = b.next
+        a.next = None
+        
+        return head

@@ -1,0 +1,38 @@
+"""
+Creat time:2020-2-12下午
+TimeToCode：
+Last modified time:
+
+80.删除有序数组的重复元素_Ⅱ
+
+给定一个有序数组，原地修改数组使得重复的元素至多出现两次，并返回修改后的长度
+PS:不允许使用额外空间
+
+Example 1:
+    Input：[1,1,1,2,2,3],
+    Output：5, nums->[1, 1, 2, 2, 3, ...]
+    It doesn't matter what you leave beyond the returned length.
+Example 2:
+    Input：[0,0,1,1,1,1,2,3,3],
+    Output：7, nums->[0, 0, 1, 1, 2, 3, 3, ...]
+
+"""
+
+class Solution:
+
+    # 本题和“26.删除有序数组的重复元素”的solution2的代码 完全相同！（只是更改了部分数值）
+    
+    # 思路如下：
+    # 方法是“有序数组多指针”
+    # 指针a指向存储目标元素的位置下标，指针b指向当前遍历判断的元素
+    # 如果a特别小或者b指向的元素和a-2指向的元素不相等，就将b元素赋值给a元素
+    # 这里的“a-2”可以拓展为“a-i”，其中i是允许的重复元素个数，本题要求i=2
+
+
+    def removeDuplicates(self, nums: List[int]) -> int:
+        a = 0
+        for b in range(len(nums)):
+            if a < 2 or nums[b] != nums[a-2]:
+                nums[a] = nums[b]
+                a += 1
+        return a

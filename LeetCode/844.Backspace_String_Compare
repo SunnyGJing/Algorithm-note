@@ -1,0 +1,66 @@
+"""
+Creat time:2020-2-8早上
+TimeToCode：
+Last modified time:
+
+844.比较含退格的两个字符串
+
+给定两个字符串s和t，分别代表两个写入文件的字符流，判断写入后是否相等。
+PS:"#"代表回退
+
+Example 1:
+    Input: S = "ab#c", T = "ad#c"
+    Output: true
+    Explanation: Both S and T become "ac".
+Example 2:
+    Input: S = "ab##", T = "c#d#"
+    Output: true
+    Explanation: Both S and T become "".
+Example 3:
+    Input: S = "a##c", T = "#a#c"
+    Output: true
+    Explanation: Both S and T become "c".
+Example 4:
+    Input: S = "a#c", T = "b"
+    Output: false
+    Explanation: S becomes "c" while T becomes "b".
+
+"""
+
+class Solution:
+
+    # 因为输入是字符文本数据流，所以是“有序”的
+    # 可以使用“有序多指针”解题模式
+
+    # 我最开始的思路是错误的！
+    # 错误的思路如下：（只记录思路，不记录代码）
+    # 用a和b分别指向两个字符串的末尾，向前遍历
+    # 遇到"#"时，用count计算#的个数，并相应地向前移动count个位置
+    # 如果a和b指向的元素相等，就同时向前移动一个位置，遍历结束时返回True
+    # 否则，返回False
+    # 错误在于：
+    # 如果count记录了2个#，往前回退2个位置，如果这两个位置也含有#，不再计数，那就会出错！
+
+    # 下面的代码，是《leetcode》中很简洁的代码
+    # 思路如下：
+    # 一边判断当前是否为#，一边用back记录需要回退的位置个数
+    # 这样同时的操作就避免了忽略某些#的错误情况发生
+
+
+    def backspaceCompare(self, s: str, t: str) -> bool:
+        len_s, len_t = len(s), len(t)
+        
+        a, b, back_a, back_b = len_s-1, len_t-1, 0, 0
+
+        while True:
+            while a >= 0 and (back_a or s[a] == '#'):
+                back_a += 1 if s[a] == '#' else -1
+                a -= 1
+            while b >= 0 and (back_b or t[b] == '#'):
+                back_b += 1 if t[b] == '#' else -1
+                b -= 1
+            if not(a >= 0 and b >= 0 and s[a] == t[b]):
+                return a==b==-1
+            a -= 1
+            b -= 1
+                 
