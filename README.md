@@ -1,6 +1,66 @@
+## 一、题目简记
+```
+便于快速复习
+分别按类别和按题号排列
+
+Note: 为了便于记忆，代码语法并不严谨
+```
+### 按类别整理：
+#### 模式1：滑动窗口/动态规划
+<details>
+<summary>53.返回最大连续子数组(含负数)的和</summary>
+
+方法：优化后的动态规划
+```python
+# 循环内
+cur_val = nums[i]>0 ? cur_val+nums[i] : nums[i]
+max_val = max(max_val, cur_val)
+
+```
+</details>
+<details>
+
+<summary>659.将有序数组拆为数值连续的子序列(长度>=3)</summary>
+
+方法：用哈希表模拟多个单调队列
+```python
+# 初始化
+hasht = collections.default(list)
+
+# 数组遍历
+pre_small = hasht.get(nums[i]-1, 0)
+hasht[nums[i]].append(pre_small + 1)
+
+hasht[nums[i]-1].remove(pre_small)
+
+# 字典遍历
+return False if i<3 for list in hasht.values() for i in list
+```
+
+</details>
+
+<details>
+<summary>1296.将无序数组拆为数值连续的子序列(长度=k)</summary>
+
+方法：
+```python
+# 初始化
+return False if len(nums) % k
+
+count = collections.Counter(nums)
+
+# 字典不为空时 循环
+start = min(count.keys())
+
+return False if count[num+i]<count[num] for i in range(1,k)
+count[num+i] -= count[num] for i in reversed(range(k,-1))
+
+```
+
+</details>
 
 
-# 刷题计划与记录
+## 二、刷题计划与记录
 ```
 2020.02计划：
 周中每天刷10道题  
@@ -9,8 +69,8 @@
 2020.03计划：
 每天上午做总结和复习1小时刷题3小时  
 ```
-## 2020年
-### 二月
+### 2020年
+#### 二月
 
 <details>
 <summary>2.12 Wed. 未分类 [7]</summary>
@@ -85,21 +145,27 @@
 - [x] 645. Set Mismatch
 </details>
 
-### 三月
+#### 三月
 
 <details>
-<summary>3.17 Tues. 区间合并 [0] 好难啊啊啊梦魇</summary>
+<summary>3.17 Tues. 区间合并 [13] 好难啊啊啊梦魇(update：打败了梦魇)</summary>
 
-- [ ] 729. My Calendar I
-- [ ] 731. My Calendar II
-- [ ] 732. My Calendar III
-- [ ] 435. Non-overlapping Intervals
-- [ ] 56. Merge Intervals
-- [ ] 57. Insert Interval
-- [ ] 207. Course Schedule
-- [ ] 621. Task Scheduler
-- [ ] Google - Scheduling Job Involving both RAM and CPU
-- [ ] 636. Exclusive Time of Functions
+- [x] 729. My Calendar I （判断某区间是否与其它区间重合）
+- [x] 731. My Calendar II （判断某区间是否同时与其它k个区间重合）
+- [x] 252. Meeting Rooms I  （判断多个区间中是否存在区间重合）
+- [x] 253. Meeting Rooms II （多个区间的重合区间个数）
+- [x] 732. My Calendar III （多个区间的重合区间个数）
+
+- [x] 56. Merge Intervals 区间合并
+- [x] 57. Insert Interval 区间插入
+- [x] 986. Interval List Intersections 区间交集
+- [x] 435. Non-overlapping Intervals 计算最小删区间个数使不重合
+
+- [x] 218. The Skyline Problem 区间的附加属性值(e.g.第三维高度)
+- [x] 621. Task Scheduler 最小化区间总长度(...)
+
+- [ ] 207. Course Schedule 判断课程安排是否存在冲突？
+- [ ] 636. Exclusive Time of Functions 计算每个区间的无重合长度
 </details>
 
 <details>
@@ -116,3 +182,5 @@
 - [ ] 
 - [ ] 
 </details>
+
+

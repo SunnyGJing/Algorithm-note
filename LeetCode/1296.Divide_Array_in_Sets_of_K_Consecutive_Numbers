@@ -3,7 +3,7 @@ Creat time:2020-1-14上午
 TimeToCode：
 Last modified time: 
 
-1296.将数组划分为k个连续数的集合
+1296.将无序数组拆为数值连续的子序列(长度=k)
 
 给定一个整数数组nums和一个整数k，判断能不能将nums划分为多个长度为k的连续数的集合。
 

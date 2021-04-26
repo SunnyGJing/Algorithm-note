@@ -3,7 +3,7 @@ Creat time:2020-1-14上午
 TimeToCode：
 Last modified time: 
 
-659.将数组拆为数值连续的子序列
+659.将有序数组拆为数值连续的子序列(长度>=3)
 
 给定一个非降序的整数数组，判断能不能拆分为至少一个长度>=3的连续整数子序列。
 
@@ -30,7 +30,7 @@ Example 3:
 """
 
 
-class Solution:
+class Solution_1:
     
     # 《leetcode》中一个很好的解答：
     # 思路：
@@ -73,7 +73,7 @@ class Solution:
 
 
 
-class Solution:
+class Solution_2:
 
     # 《leetcode》中一个很好的解答：
     # 建立哈希表，记录每个元素可以作为子序列的第i个元素
