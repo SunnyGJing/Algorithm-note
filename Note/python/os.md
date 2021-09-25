@@ -76,6 +76,10 @@
      ```
      新建路径为path的文件夹
      ```
+   - os.makedirs(path, exist_ok=True)
+     ```
+     新建路径为path的文件夹，如果path已存在则跳过创建
+     ```
 2. 重命名
    - os.rename(name, new_name)
      ```
