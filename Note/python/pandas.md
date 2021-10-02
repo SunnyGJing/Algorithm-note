@@ -81,7 +81,7 @@
 9.  读取文件
     ```python
     # csv文件、tsv文件
-    pd.read_csv('xxx.csv')
+    pd.read_csv('xxx.csv', sep='\t', header=None, names=['aaa','bbb'])
 
     # excel文件，skiprows用于跳过前几行
     pd.read_excel('xxx.xlsx',
