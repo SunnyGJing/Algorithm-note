@@ -44,12 +44,16 @@
     f_data = f_raw.dropna(axis=0, how='any')
     ```
 
-6. 插入列
+6. 删除重复的行
+   ```python
+   df.drop_duplicates(['xxx','yyy'],keep='first')
+   ```
+7. 插入列
    ```python
    # 插入列作为第1列，列标题为prob_1，填充值为0.125
     DataFrame.insert(1, 'prob_1', 0.125)
    ```
-7. 一行变多行
+8. 一行变多行
    ```python
     ## pandas>=0.25
     # 先将字段拆分
@@ -57,7 +61,7 @@
     # 调用explode()方法 
     df.explode('xxx')
    ```
-8. 修改特定列的内容
+9.  修改特定列的内容
     ```python
     # 用一个数字为指定行/列赋值
     Y_sample.loc[:, 'price'] = 0
@@ -78,7 +82,7 @@
     f_data[~(f_data['服务']=='其他')]
     ```
 
-9.  读取文件
+10. 读取文件
     ```python
     # csv文件、tsv文件
     pd.read_csv('xxx.csv', sep='\t', header=None, names=['aaa','bbb'])
@@ -90,7 +94,7 @@
                   dtype=str)
     ```
 
-10. 保存文件
+11. 保存文件
     ```python
     DataFrame.to_csv('file_name', sep='\t', encoding=;utf-8, index=False, header=False)
     ```
