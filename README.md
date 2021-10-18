@@ -2,8 +2,6 @@
 ```
 便于快速复习
 分别按类别和按题号排列
-
-Note: 为了便于记忆，代码语法并不严谨
 ```
 ### 按类别整理：
 #### 模式1：滑动窗口/动态规划
@@ -69,8 +67,6 @@ count[num+i] -= count[num] for i in reversed(range(k,-1))
 2020.03计划：
 每天上午做总结和复习1小时刷题3小时  
 ```
-### 2020年
-#### 二月
 
 <details>
 <summary>2.12 Wed. 未分类 [7]</summary>
@@ -145,7 +141,6 @@ count[num+i] -= count[num] for i in reversed(range(k,-1))
 - [x] 645. Set Mismatch
 </details>
 
-#### 三月
 
 <details>
 <summary>3.17 Tues. 区间合并 [13] 好难啊啊啊梦魇(update：打败了梦魇)</summary>
