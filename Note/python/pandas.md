@@ -1,3 +1,4 @@
+## 常规设置
 1. 打印信息显示不完整
     ```python
     # 很卡噢，谨慎使用
@@ -7,7 +8,7 @@
     #设置value的显示长度为100，默认为50
     pd.set_option('max_colwidth',100)
     ```
-
+## 单个文件的处理
 2. 修改列标题
    ```python
     print(dataframe.columns)
@@ -84,8 +85,14 @@
 
 10. 读取文件
     ```python
-    # csv文件、tsv文件
-    pd.read_csv('xxx.csv', sep='\t', header=None, names=['aaa','bbb'])
+    # csv文件、tsv文件，object表示字符串格式
+    pd.read_csv('xxx.csv',
+                sep='\t', 
+                header=None, 
+                skiprows=[0],
+                usecols=[0,10],
+                names=['aaa','bbb'],
+                dtype=object)
 
     # excel文件，skiprows用于跳过前几行
     pd.read_excel('xxx.xlsx',
@@ -97,4 +104,11 @@
 11. 保存文件
     ```python
     DataFrame.to_csv('file_name', sep='\t', encoding=;utf-8, index=False, header=False)
+    ```
+
+12. dataframe转换为list  
+    - 这篇博客写的详细：[pandas.DataFrame.to_dict()的使用详解](https://blog.csdn.net/weixin_39791387/article/details/87627235)
+## 多个文件的处理
+13. 多个文件的行拼接
+    ```python
     ```
