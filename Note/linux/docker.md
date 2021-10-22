@@ -17,9 +17,12 @@ docker rm 2dad15117153
 docker run -itd --name hotspot --restart always --privileged=true -v /mnt/fileinfo:/mnt/fileinfo -p 9028:9030 hotspot:v1 /usr/sbin/init
 ll -h
 free -h
-docker commit 4cf33b17977b hotspot:v2(hotpot是REPOSITORY, v2是TAG)
+
 docker images
-docker save -o hotspot.tar hotspot:v2(打包为tar)
+docker rmi 366164d3d5e1
+docker commit f5352b9d7446 hotspot_predone:v2(hotpot是REPOSITORY, v2是TAG)
+docker save -o hotspot_predone.tar hotspot_predone:v2(打包为tar)
+
 rdz
 rzs
 rz
