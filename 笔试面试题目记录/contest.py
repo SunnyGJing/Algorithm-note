@@ -250,7 +250,8 @@ while True:
 样例输出
 3
 """
-
+[354. 俄罗斯套娃信封问题](https://leetcode-cn.com/problems/russian-doll-envelopes/)
+[面试题 08.13. 堆箱子](https://leetcode-cn.com/problems/pile-box-lcci/)
 # while True:
 #     n = input().strip()
 #     if n != '':
