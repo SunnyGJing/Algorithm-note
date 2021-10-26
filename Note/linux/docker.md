@@ -26,10 +26,7 @@ docker save -o hotspot_predone.tar hotspot_predone:v2(打包为tar)
 rdz
 rzs
 rz
-grep cron /var/log/syslog
-systemctl restart crond.service
-crontab -e
-crontab -l
+
 docker exec -it hotspot sh /home/code/test.sh
 docker exec -it hotspot python /home/code/test.py
 curl http://localhost:9030/second_hotword_modify

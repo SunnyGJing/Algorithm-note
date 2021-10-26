@@ -34,15 +34,18 @@
    ```
 5. 删除含缺失值的行/列
     ```python
-    DataFrame.dropna(axis=0, how='any', thresh=None, subset=None, inplace=False)
-
     """
-    axis=0 / 1: 删除包含缺失值（NaN）的行 / 列
-    how='any' / 'all', 出现一个Nan就删除 / 全部Nan才删除
-    subset 只检查部分行/列
+    axis=0/1: 删除包含缺失值的行 / 列
+    how='any'/'all': 检查项出现一个Nan就删除/全部Nan才删除
+    subset: 只检查部分行/列
     """
 
-    f_data = f_raw.dropna(axis=0, how='any')
+    DataFrame = DataFrame.dropna(axis=0, 
+                                 how='any', 
+                                 thresh=None, 
+                                 subset=None, 
+                                 inplace=False)
+    DataFrame.reindex(DataFrame.shape[0])
     ```
 
 6. 删除重复的行
