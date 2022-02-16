@@ -12,8 +12,10 @@
 
 2. 字符串和变量拼接
    ```bash
-   file_name = 'xxx.txt'
+   # 注意：等号两边不能有空格
+   file_name="xxx.txt"
 
-   # 注意：单引号/双引号/大括号的使用
-   python xxx.py --file "./file_dir/'${file_name}'"
+   # 注意：必须用双引号，或者省掉双引号
+   # 注意：可以去掉大括号，也可以把变量放在双引号外面
+   python xxx.py --file "./file_dir/${file_name}"
    ```

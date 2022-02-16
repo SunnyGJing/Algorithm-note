@@ -91,6 +91,7 @@
     # csv文件、tsv文件，object表示字符串格式
     pd.read_csv('xxx.csv',
                 sep='\t', 
+                quoting=3,
                 header=None, 
                 skiprows=[0],
                 usecols=[0,10],
@@ -98,10 +99,12 @@
                 dtype=object)
 
     # excel文件，skiprows用于跳过前几行
-    pd.read_excel('xxx.xlsx',
+    # 把不同sheet数据拼接一起
+    pd.concat(pd.read_excel('xxx.xlsx',
+                  sheet_name=[0, 1, 2],
                   skiprows=[0],
                   usecols=['xxx','yyy'],
-                  dtype=str)
+                  dtype=str))
     ```
 
 11. 保存文件
@@ -114,4 +117,5 @@
 ## 多个文件的处理
 13. 多个文件的行拼接
     ```python
+    pd.concat([df1, df2])
     ```
